@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# Film output from the Stageshow scripts (local only)
+shots/
+*.film.png

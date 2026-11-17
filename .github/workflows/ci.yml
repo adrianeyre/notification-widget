@@ -1,0 +1,168 @@
+# One pipeline for every pull request and every push to main:
+#
+#   build-and-test ─▶ release (main only) ─▶ site ─▶ deploy (main only)
+#
+# - build-and-test: the core package's tests and an unsigned app build, on macOS.
+# - release: semantic-release reads the Conventional Commits since the last tag, picks
+#   the next version, tags it and publishes a GitHub release with notes.
+# - site: builds the website in site/ (Vite and the Stageshow kit). On pull requests it
+#   only checks the site builds; on main it's stamped with the version just released
+#   and uploaded for GitHub Pages.
+# - deploy: publishes the site to GitHub Pages at notification-widget.adrianeyre.co.uk.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Read-only by default; the release and deploy jobs ask for exactly what they need.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # Never cancel a run on main half-way through a release or a deploy.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build-and-test:
+    name: Core tests and app build
+    runs-on: macos-latest
+    # macOS minutes are expensive on private repos: fail fast rather than hang.
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Select the latest Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Show toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
+
+      - name: Cache SwiftPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            Packages/NotificationWidgetCore/.build
+            .spm
+          key: spm-${{ runner.os }}-${{ hashFiles('Packages/NotificationWidgetCore/Package.swift', 'NotificationWidget.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          restore-keys: spm-${{ runner.os }}-
+
+      - name: Test core package
+        run: swift test --package-path Packages/NotificationWidgetCore
+
+      - name: Build app (unsigned)
+        run: |
+          xcodebuild build \
+            -project NotificationWidget.xcodeproj \
+            -scheme NotificationWidget \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -clonedSourcePackagesDirPath .spm \
+            -skipPackagePluginValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+
+  release:
+    name: Release
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      # Pushes the version tag and creates the GitHub release.
+      contents: write
+    steps:
+      # The whole history and its tags, which semantic-release reads to find the last release.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          # semantic-release 26 needs Node 26.13 or later.
+          node-version: "26"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install release tooling
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  site:
+    name: Build the website
+    needs: [build-and-test, release]
+    # Runs on pull requests too (release is skipped there), so a broken site fails the check.
+    if: ${{ !cancelled() && needs.build-and-test.result == 'success' && (needs.release.result == 'success' || needs.release.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # The page shows the latest release. Fetch tags again: release may have just made one.
+      - name: Find the version
+        id: version
+        working-directory: .
+        run: |
+          git fetch --tags --force --quiet || true
+          echo "version=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)" >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        run: npm run build
+        env:
+          SITE_VERSION: ${{ steps.version.outputs.version }}
+
+      - name: Upload for GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist/
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: site
+    if: ${{ !cancelled() && needs.site.result == 'success' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Publishing needs both, and only this job has them.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,60 @@
+# XcodeGen spec. NotificationWidget.xcodeproj is generated from this file and committed,
+# so XcodeGen is only needed when changing the project: run `xcodegen generate`.
+name: NotificationWidget
+options:
+  bundleIdPrefix: com.adrianeyre
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+  developmentLanguage: en-GB
+packages:
+  NotificationWidgetCore:
+    path: Packages/NotificationWidgetCore
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+targets:
+  NotificationWidget:
+    type: application
+    platform: macOS
+    sources:
+      - path: App/NotificationWidget
+        excludes:
+          - "*.entitlements"
+    configFiles:
+      Debug: Config/Base.xcconfig
+      Release: Config/Base.xcconfig
+    info:
+      path: App/NotificationWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Notification Widget
+        CFBundleName: Notification Widget
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSApplicationCategoryType: public.app-category.productivity
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        # Menu bar app: no Dock icon.
+        LSUIElement: true
+        NSHumanReadableCopyright: ""
+        # Shown when asking to read Focus status (ALR-7).
+        NSFocusStatusUsageDescription: Notification Widget silences Alert sounds and shaking while a Focus is on.
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.adrianeyre.NotificationWidget
+        PRODUCT_NAME: Notification Widget
+        PRODUCT_MODULE_NAME: NotificationWidget
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_HARDENED_RUNTIME: true
+        GENERATE_INFOPLIST_FILE: false
+        COMBINE_HIDPI_IMAGES: true
+    dependencies:
+      - package: NotificationWidgetCore
+schemes:
+  NotificationWidget:
+    build:
+      targets:
+        NotificationWidget: all
+    run:
+      config: Debug
+    archive:
+      config: Release

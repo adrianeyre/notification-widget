@@ -1,0 +1,36 @@
+# Slack app manifest for Notification Widget (issue #4, ADR 0002).
+# Create the app at https://api.slack.com/apps → Create New App → From an app manifest,
+# pick the work workspace, and paste this file.
+display_information:
+  name: Notification Widget
+  description: Personal desktop Panel for DMs and Mentions. Read-only.
+oauth_config:
+  # For "Sign in with Slack" in the app (SRC-8): the app listens on this loopback port.
+  redirect_urls:
+    - http://localhost:53682/slack/oauth/callback
+  scopes:
+    # User token scopes (xoxp-…). The app reads only; it never posts.
+    user:
+      - im:history
+      - mpim:history
+      - channels:history
+      - groups:history
+      - im:read
+      - mpim:read
+      - channels:read
+      - groups:read
+      - users:read
+settings:
+  event_subscriptions:
+    # User events, delivered over Socket Mode (no public Request URL needed).
+    user_events:
+      - message.im
+      - message.mpim
+      - message.channels
+      - message.groups
+  interactivity:
+    is_enabled: false
+  org_deploy_enabled: false
+  socket_mode_enabled: true
+  # Off, so the user token doesn't expire.
+  token_rotation_enabled: false

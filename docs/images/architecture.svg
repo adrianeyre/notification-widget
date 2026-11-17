@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 400" width="880" height="400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">How Notification Widget fits together</title>
+  <desc id="d">Google Calendar and Gmail are polled through the Google API with the GoogleSignIn token; Slack events arrive over Socket Mode, with a Web API Backfill. Each Source hands a snapshot of Items to the Item store, which applies Dismissals and feeds the Alert engine and the Panel.</desc>
+  <style>
+    .box { fill: #ffffff; stroke: #d0d4dc; stroke-width: 1; }
+    .core { fill: #eef3ff; stroke: #9db4f0; }
+    .ui { fill: #f3f0ff; stroke: #b9a8ef; }
+    .h { font-size: 14px; font-weight: 600; fill: #1d2330; }
+    .s { font-size: 12px; fill: #5b6474; }
+    .line { stroke: #8a93a3; stroke-width: 1.5; fill: none; marker-end: url(#a); }
+    .label { font-size: 11px; fill: #5b6474; }
+    @media (prefers-color-scheme: dark) {
+      .box { fill: #1f2329; stroke: #3a404a; }
+      .core { fill: #1c2640; stroke: #3d5390; }
+      .ui { fill: #262040; stroke: #54468f; }
+      .h { fill: #eef1f6; }
+      .s, .label { fill: #a3acba; }
+      .line { stroke: #6f7887; }
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8a93a3"/>
+    </marker>
+  </defs>
+
+  <!-- Sources -->
+  <rect class="box" x="20" y="30" width="200" height="72" rx="10"/>
+  <text class="h" x="36" y="60">Google Calendar</text>
+  <text class="s" x="36" y="82">events.list every 5 min</text>
+
+  <rect class="box" x="20" y="164" width="200" height="72" rx="10"/>
+  <text class="h" x="36" y="194">Gmail</text>
+  <text class="s" x="36" y="216">history.list every 30 s</text>
+
+  <rect class="box" x="20" y="298" width="200" height="72" rx="10"/>
+  <text class="h" x="36" y="328">Slack</text>
+  <text class="s" x="36" y="350">Socket Mode + Web API</text>
+
+  <!-- Core -->
+  <rect class="box core" x="320" y="120" width="220" height="160" rx="12"/>
+  <text class="h" x="340" y="152">NotificationWidgetCore</text>
+  <text class="s" x="340" y="180">Sources → Items</text>
+  <text class="s" x="340" y="202">Item store + Dismissals</text>
+  <text class="s" x="340" y="224">Alert engine, Reminder Time</text>
+  <text class="s" x="340" y="246">Source health, backoff</text>
+
+  <!-- UI -->
+  <rect class="box ui" x="640" y="60" width="220" height="110" rx="12"/>
+  <text class="h" x="660" y="92">Panel</text>
+  <text class="s" x="660" y="116">Events · DMs and Mentions</text>
+  <text class="s" x="660" y="136">· Emails, on the desktop</text>
+
+  <rect class="box ui" x="640" y="230" width="220" height="110" rx="12"/>
+  <text class="h" x="660" y="262">Alerts</text>
+  <text class="s" x="660" y="286">Sound, shake, raise</text>
+  <text class="s" x="660" y="306">Muted during Focus</text>
+
+  <path class="line" d="M220 66 C270 66 270 150 318 160"/>
+  <path class="line" d="M220 200 L318 200"/>
+  <path class="line" d="M220 334 C270 334 270 250 318 240"/>
+  <text class="label" x="232" y="120">OAuth (loopback + PKCE)</text>
+  <text class="label" x="236" y="290">tokens in Keychain</text>
+
+  <path class="line" d="M540 170 C590 170 590 115 638 115"/>
+  <path class="line" d="M540 230 C590 230 590 285 638 285"/>
+</svg>

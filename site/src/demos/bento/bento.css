@@ -1,0 +1,414 @@
+/* The features grid. Everything nests under .nw-bento. Container queries on
+   the section pick the layout; each picture is its own Stage at 1:1. */
+.nw-bento {
+  --pad: 28px;
+  --gap: 14px;
+  --tile: var(--pg-tile, #f3f3f5);
+  --ink: var(--pg-ink, #1d1d1f);
+  --ink-2: var(--pg-ink-2, #6e6e73);
+  --card: #ffffff;
+  --card-edge: rgba(0, 0, 0, 0.06);
+  --hair: rgba(0, 0, 0, 0.07);
+  --sunken: rgba(0, 0, 0, 0.035);
+  --blue: #007aff;
+  --orange: #c86a00;
+  container-type: inline-size;
+
+  & .nb-grid {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 320px 300px 330px 260px 300px;
+    grid-template-areas: 'hero' 'stat' 'sources' 'private' 'join';
+  }
+
+  @container (min-width: 600px) {
+    & .nb-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: 380px 330px 330px;
+      grid-template-areas: 'hero hero' 'stat sources' 'private join';
+    }
+  }
+
+  @container (min-width: 900px) {
+    & .nb-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: 380px 330px;
+      grid-template-areas: 'hero hero stat' 'sources private join';
+    }
+  }
+
+  @container (max-width: 599px) {
+    & .nb-grid {
+      --pad: 24px;
+    }
+  }
+
+  /* ---- The tile ---- */
+
+  & .nb-tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    background: var(--tile);
+  }
+
+  & .nb-tile--hero { grid-area: hero; }
+  & .nb-tile--stat { grid-area: stat; background: #121214; }
+  & .nb-tile--sources { grid-area: sources; }
+  & .nb-tile--private { grid-area: private; }
+  & .nb-tile--join { grid-area: join; }
+
+  & .nb-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 400px;
+    margin: 0;
+    padding: 24px var(--pad) 0;
+    font-size: 17px;
+    line-height: 24px;
+    letter-spacing: -0.012em;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  & .nb-copy b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  & .nb-tile--hero .nb-copy {
+    max-width: 520px;
+  }
+
+  & .nb-picture {
+    position: absolute;
+    bottom: 0;
+  }
+
+  & .nb-picture--full {
+    left: 0;
+    width: 100%;
+  }
+
+  & .nb-stage .ss-stage {
+    overflow: hidden;
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+    --ss-accent: var(--blue);
+  }
+
+  /* ---- Alerts (hero): two grouped settings, as macOS Settings draws them ---- */
+
+  /* The Settings pane: one surface hung from the copy gutter, off the
+     tile's bottom; the two groups sit inside it as sunken boxes */
+  & .nb-settings {
+    position: absolute;
+    top: 14px;
+    left: var(--pad);
+    right: var(--pad);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 18px 20px 0;
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 0 0 1px var(--card-edge), 0 10px 30px -12px rgba(30, 30, 60, 0.2);
+  }
+
+  & .nb-settings[data-narrow] {
+    gap: 12px;
+    padding: 16px 14px 0;
+  }
+
+  & .nb-settings[data-narrow] .nb-setting {
+    padding: 0 10px;
+  }
+
+  & .nb-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .nb-group-label {
+    padding: 0 12px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--ink-2);
+  }
+
+  /* Each group runs on past the tile's bottom edge */
+  & .nb-group-card {
+    padding-bottom: 72px;
+    border-radius: 10px;
+    background: var(--sunken);
+  }
+
+  & .nb-setting {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 42px;
+    padding: 0 12px;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--ink);
+  }
+
+  & .nb-setting + .nb-setting {
+    box-shadow: inset 0 1px 0 var(--hair);
+  }
+
+  & .nb-setting-name {
+    flex: 1;
+  }
+
+  & .nb-setting-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--ink-2);
+  }
+
+  & .nb-toggle {
+    flex: none;
+  }
+
+  /* ---- Speed (stat): the one dark tile ---- */
+
+  & .nb-stat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 24px var(--pad) 28px;
+  }
+
+  & .nb-stat-lead {
+    font-size: 17px;
+    line-height: 24px;
+    letter-spacing: -0.012em;
+    font-weight: 600;
+    color: #f5f5f7;
+  }
+
+  & .nb-stat-number {
+    display: block;
+    margin-top: auto;
+    font-size: 128px;
+    line-height: 0.9;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: #fff;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .nb-stat-unit {
+    font-size: 56px;
+    letter-spacing: -0.02em;
+  }
+
+  & .nb-stat-label {
+    max-width: 260px;
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 21px;
+    color: #a1a1a6;
+    text-wrap: pretty;
+  }
+
+  /* ---- Sources (diagram) ---- */
+
+  & .nb-sources {
+    position: absolute;
+    top: 14px;
+    left: var(--pad);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  & .nb-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: 12px;
+    background: var(--card);
+    box-shadow: 0 0 0 1px var(--card-edge), 0 2px 6px -2px rgba(0, 0, 0, 0.08);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  & .nb-node {
+    position: absolute;
+    top: 58px;
+    right: var(--pad);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 76px;
+    height: 64px;
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 0 0 1px var(--card-edge), 0 2px 6px -2px rgba(0, 0, 0, 0.08);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 16px;
+    color: var(--ink);
+    transition: box-shadow 0.3s ease 0.9s;
+  }
+
+  & .nb-node[data-on] {
+    box-shadow: 0 0 0 1.5px var(--blue), 0 6px 16px -6px rgba(0, 122, 255, 0.4);
+  }
+
+  /* The Panel in miniature: a strip with three columns */
+  & .nb-node-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    width: 40px;
+    height: 16px;
+    padding: 3px;
+    border-radius: 5px;
+    background: var(--hair);
+  }
+
+  & .nb-node-strip i {
+    border-radius: 2px;
+    background: var(--ink-2);
+    opacity: 0.45;
+  }
+
+  & .nb-line {
+    --ss-accent: var(--blue);
+  }
+
+  & .nb-line--1 path { transition-delay: 0.09s; }
+  & .nb-line--2 path { transition-delay: 0.18s; }
+
+  /* ---- Private (statement) ---- */
+
+  & .nb-statement {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 28px var(--pad);
+  }
+
+  & .nb-statement-icon {
+    color: var(--blue);
+  }
+
+  & .nb-statement-text {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  & .nb-statement-text span {
+    color: var(--ink-2);
+  }
+
+  /* ---- Join (component) ---- */
+
+  & .nb-event {
+    position: absolute;
+    bottom: var(--pad);
+    left: var(--pad);
+    right: var(--pad);
+    padding: 18px;
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: 0 0 0 1px var(--card-edge), 0 10px 26px -10px rgba(30, 30, 60, 0.2);
+  }
+
+  & .nb-event-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  & .nb-event-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  & .nb-event-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 21px;
+    color: var(--ink);
+  }
+
+  & .nb-event-when {
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .nb-event-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding-top: 16px;
+    box-shadow: inset 0 1px 0 var(--hair);
+  }
+
+  & .nb-event-now {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--orange);
+  }
+
+  & .nb-event-join {
+    padding-inline: 20px;
+    font-weight: 600;
+    will-change: transform;
+  }
+
+  & .nb-event-join[data-on] {
+    animation: nb-press 0.36s ease-out;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .nw-bento {
+    --card: #2a2a2e;
+    --card-edge: rgba(255, 255, 255, 0.08);
+    --hair: rgba(255, 255, 255, 0.09);
+    --sunken: rgba(255, 255, 255, 0.05);
+    --blue: #0a84ff;
+    --orange: #ff9f0a;
+  }
+
+  .nw-bento .nb-tile--stat {
+    background: #000;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+}
+
+@keyframes nb-press {
+  0% { transform: scale(1); }
+  35% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}

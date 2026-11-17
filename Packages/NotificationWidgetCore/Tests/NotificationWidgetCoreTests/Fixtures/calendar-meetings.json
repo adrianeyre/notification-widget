@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": "meet", "summary": "Stand-up", "status": "confirmed",
+      "start": { "dateTime": "2026-11-17T10:00:00Z" }, "end": { "dateTime": "2026-11-17T10:15:00Z" },
+      "hangoutLink": "https://meet.google.com/abc-defg-hij",
+      "conferenceData": { "entryPoints": [{ "entryPointType": "video", "uri": "https://meet.google.com/abc-defg-hij" }, { "entryPointType": "phone", "uri": "tel:+44-20-1234-5678" }] }
+    },
+    {
+      "id": "conference-only", "summary": "Vendor call", "status": "confirmed",
+      "start": { "dateTime": "2026-11-17T11:00:00Z" }, "end": { "dateTime": "2026-11-17T11:30:00Z" },
+      "conferenceData": { "entryPoints": [{ "entryPointType": "phone", "uri": "tel:+1-555-0100" }, { "entryPointType": "video", "uri": "https://meet.google.com/xyz-abcd-efg" }] }
+    },
+    {
+      "id": "zoom-location", "summary": "Customer demo", "status": "confirmed",
+      "start": { "dateTime": "2026-11-17T13:00:00Z" }, "end": { "dateTime": "2026-11-17T14:00:00Z" },
+      "location": "https://acme.zoom.us/j/98765432100?pwd=AbCdEf123"
+    },
+    {
+      "id": "zoom-description", "summary": "Interview", "status": "confirmed",
+      "start": { "dateTime": "2026-11-17T15:00:00Z" }, "end": { "dateTime": "2026-11-17T16:00:00Z" },
+      "location": "Room 4",
+      "description": "<p>Join Zoom Meeting<br><a href=\"https://zoom.us/j/1234567890?pwd=xyz&amp;from=addon\">https://zoom.us/j/1234567890?pwd=xyz&amp;from=addon</a></p>"
+    },
+    {
+      "id": "no-link", "summary": "Focus time", "status": "confirmed",
+      "start": { "dateTime": "2026-11-17T17:00:00Z" }, "end": { "dateTime": "2026-11-17T18:00:00Z" },
+      "description": "See https://zoom.us/support for help"
+    }
+  ]
+}
