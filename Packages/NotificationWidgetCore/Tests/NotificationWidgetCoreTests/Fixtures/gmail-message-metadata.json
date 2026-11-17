@@ -1,0 +1,11 @@
+{
+  "id": "18c2f0a1b2c3d4e5",
+  "threadId": "18c2f0a1b2c3d4e0",
+  "internalDate": "1795420800000",
+  "payload": {
+    "headers": [
+      { "name": "From", "value": "\"Jamie Fox\" <jamie@example.com>" },
+      { "name": "Subject", "value": "Quarterly planning: agenda" }
+    ]
+  }
+}

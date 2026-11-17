@@ -1,0 +1,13 @@
+// Shared build settings for the Notification Widget app.
+//
+// The Google and Slack clients are entered in the app (Settings → Accounts → Setup),
+// not here. Config/Secrets.xcconfig (git-ignored) is optional: it only sets a signing
+// team, which reading macOS Focus status needs. Copy Config/Secrets.example.xcconfig.
+
+MARKETING_VERSION = 0.1.0
+CURRENT_PROJECT_VERSION = 1
+
+// Ad-hoc signing ("Sign to Run Locally") unless Secrets.xcconfig sets a team.
+CODE_SIGN_IDENTITY = -
+
+#include? "Secrets.xcconfig"

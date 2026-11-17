@@ -1,0 +1,454 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		14ED7B99D4101820673E7BD3 /* FocusMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FDF4E021B1E26ED57E7A9B /* FocusMonitor.swift */; };
+		515670375244B4644ED987D4 /* PanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC5B9122F2605BAC13F41A9 /* PanelView.swift */; };
+		62E3E81B79F6A679780E756F /* SlackAccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE4323B9E47BA7F03C504E6 /* SlackAccountController.swift */; };
+		7A0C729439A048FAFD33221F /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802A80692193BB381A012408 /* ItemRow.swift */; };
+		7F33A0968A1FECA5B5D3568D /* NotificationWidgetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 366DD44B43E267A7D7A09D8B /* NotificationWidgetApp.swift */; };
+		84C428EB934BFF12F1C21ABC /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363D1B470DAB3AB5B60E0051 /* AppModel.swift */; };
+		C12E6E397DB0F270897C3D2C /* PanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD1FEEF2F544CA4A93AD5F /* PanelController.swift */; };
+		CC857127959611713597AFCE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFCA0947FBD9E3D49D5E668 /* SettingsView.swift */; };
+		D9C65E84292778CB10C5ED91 /* NotificationWidgetCore in Frameworks */ = {isa = PBXBuildFile; productRef = 92562085002C3A5A3B9C4C8A /* NotificationWidgetCore */; };
+		E04698FF65F558822E430967 /* DebugSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B54025B412F7F7B6DAA9E5 /* DebugSnapshots.swift */; };
+		E2DD04ABA0EDFA1F3177C941 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DE7CE3F2BD8A039849CF2C /* LaunchAtLogin.swift */; };
+		E9EB5436CF04DB711FB51062 /* SourceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6754562923A6124E1733E72 /* SourceCoordinator.swift */; };
+		EB0379D321FFC7646DCBF3E1 /* GoogleAccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62071D3467C310B4ED3F2C0C /* GoogleAccountController.swift */; };
+		FBBAF319193300D86B46EFE4 /* AccountsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A19923713297C9E4B07B13 /* AccountsSettings.swift */; };
+		FF6BB4DFB0CC4737BE25264A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CD7B3E3B45BF20FDC7A39E /* AppDelegate.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		11119FD9E8A85FC582739FDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		11D853B974A3DF5FB216EB11 /* NotificationWidgetCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NotificationWidgetCore; path = Packages/NotificationWidgetCore; sourceTree = SOURCE_ROOT; };
+		2FE4323B9E47BA7F03C504E6 /* SlackAccountController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlackAccountController.swift; sourceTree = "<group>"; };
+		31DE7CE3F2BD8A039849CF2C /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
+		363D1B470DAB3AB5B60E0051 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		366DD44B43E267A7D7A09D8B /* NotificationWidgetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationWidgetApp.swift; sourceTree = "<group>"; };
+		5CA29731DDD48F49A3484950 /* NotificationWidget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotificationWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		62071D3467C310B4ED3F2C0C /* GoogleAccountController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAccountController.swift; sourceTree = "<group>"; };
+		66CD7B3E3B45BF20FDC7A39E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		67B54025B412F7F7B6DAA9E5 /* DebugSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSnapshots.swift; sourceTree = "<group>"; };
+		802A80692193BB381A012408 /* ItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRow.swift; sourceTree = "<group>"; };
+		A3FDF4E021B1E26ED57E7A9B /* FocusMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusMonitor.swift; sourceTree = "<group>"; };
+		BEB2E0DF5E085E9E3A04B31F /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		BFC5B9122F2605BAC13F41A9 /* PanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelView.swift; sourceTree = "<group>"; };
+		C6754562923A6124E1733E72 /* SourceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceCoordinator.swift; sourceTree = "<group>"; };
+		CCFCA0947FBD9E3D49D5E668 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D8A19923713297C9E4B07B13 /* AccountsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsSettings.swift; sourceTree = "<group>"; };
+		FDDD1FEEF2F544CA4A93AD5F /* PanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5205A21AF3FCA4848E2CE1BD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9C65E84292778CB10C5ED91 /* NotificationWidgetCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		227EED57AAEFAEC319D75453 /* NotificationWidget */ = {
+			isa = PBXGroup;
+			children = (
+				11119FD9E8A85FC582739FDF /* Info.plist */,
+				C2ED7A5211B53BD2F7AA0C47 /* Accounts */,
+				6CE4C042413B7E008B7DD681 /* Alerts */,
+				4A500B0128CAEEED3F9FE053 /* App */,
+				B0C457990E34D931CF972D29 /* Debug */,
+				5118985C6FB38E40F7702840 /* Panel */,
+				3425BE97660607A2D575C023 /* Settings */,
+			);
+			path = NotificationWidget;
+			sourceTree = "<group>";
+		};
+		2876017FA44A2496C1654CB1 = {
+			isa = PBXGroup;
+			children = (
+				5C90601B32C07A490445E3B3 /* App */,
+				793F2CEFC28AF5EF93654253 /* Config */,
+				5A4F36275D61A78DD2C21362 /* Packages */,
+				B4AD6F61690A2FF7430378C8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3425BE97660607A2D575C023 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D8A19923713297C9E4B07B13 /* AccountsSettings.swift */,
+				CCFCA0947FBD9E3D49D5E668 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		4A500B0128CAEEED3F9FE053 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				66CD7B3E3B45BF20FDC7A39E /* AppDelegate.swift */,
+				363D1B470DAB3AB5B60E0051 /* AppModel.swift */,
+				31DE7CE3F2BD8A039849CF2C /* LaunchAtLogin.swift */,
+				366DD44B43E267A7D7A09D8B /* NotificationWidgetApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		5118985C6FB38E40F7702840 /* Panel */ = {
+			isa = PBXGroup;
+			children = (
+				802A80692193BB381A012408 /* ItemRow.swift */,
+				FDDD1FEEF2F544CA4A93AD5F /* PanelController.swift */,
+				BFC5B9122F2605BAC13F41A9 /* PanelView.swift */,
+			);
+			path = Panel;
+			sourceTree = "<group>";
+		};
+		5A4F36275D61A78DD2C21362 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				11D853B974A3DF5FB216EB11 /* NotificationWidgetCore */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		5C90601B32C07A490445E3B3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				227EED57AAEFAEC319D75453 /* NotificationWidget */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6CE4C042413B7E008B7DD681 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				A3FDF4E021B1E26ED57E7A9B /* FocusMonitor.swift */,
+			);
+			path = Alerts;
+			sourceTree = "<group>";
+		};
+		793F2CEFC28AF5EF93654253 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				BEB2E0DF5E085E9E3A04B31F /* Base.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		B0C457990E34D931CF972D29 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				67B54025B412F7F7B6DAA9E5 /* DebugSnapshots.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		B4AD6F61690A2FF7430378C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5CA29731DDD48F49A3484950 /* NotificationWidget.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C2ED7A5211B53BD2F7AA0C47 /* Accounts */ = {
+			isa = PBXGroup;
+			children = (
+				62071D3467C310B4ED3F2C0C /* GoogleAccountController.swift */,
+				2FE4323B9E47BA7F03C504E6 /* SlackAccountController.swift */,
+				C6754562923A6124E1733E72 /* SourceCoordinator.swift */,
+			);
+			path = Accounts;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1401119552A9D7D4E6C3F458 /* NotificationWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0CD868581FA7B1DF110D43B /* Build configuration list for PBXNativeTarget "NotificationWidget" */;
+			buildPhases = (
+				32C8B115A1CDC46EC912C1B7 /* Sources */,
+				5205A21AF3FCA4848E2CE1BD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotificationWidget;
+			packageProductDependencies = (
+				92562085002C3A5A3B9C4C8A /* NotificationWidgetCore */,
+			);
+			productName = NotificationWidget;
+			productReference = 5CA29731DDD48F49A3484950 /* NotificationWidget.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		752CD303947D59DDCBAA1DB5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					1401119552A9D7D4E6C3F458 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F596043D94ABD04EC509C4BF /* Build configuration list for PBXProject "NotificationWidget" */;
+			developmentRegion = "en-GB";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				"en-GB",
+			);
+			mainGroup = 2876017FA44A2496C1654CB1;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				932E33ABCABB7EF82B573854 /* XCLocalSwiftPackageReference "Packages/NotificationWidgetCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B4AD6F61690A2FF7430378C8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1401119552A9D7D4E6C3F458 /* NotificationWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		32C8B115A1CDC46EC912C1B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBBAF319193300D86B46EFE4 /* AccountsSettings.swift in Sources */,
+				FF6BB4DFB0CC4737BE25264A /* AppDelegate.swift in Sources */,
+				84C428EB934BFF12F1C21ABC /* AppModel.swift in Sources */,
+				E04698FF65F558822E430967 /* DebugSnapshots.swift in Sources */,
+				14ED7B99D4101820673E7BD3 /* FocusMonitor.swift in Sources */,
+				EB0379D321FFC7646DCBF3E1 /* GoogleAccountController.swift in Sources */,
+				7A0C729439A048FAFD33221F /* ItemRow.swift in Sources */,
+				E2DD04ABA0EDFA1F3177C941 /* LaunchAtLogin.swift in Sources */,
+				7F33A0968A1FECA5B5D3568D /* NotificationWidgetApp.swift in Sources */,
+				C12E6E397DB0F270897C3D2C /* PanelController.swift in Sources */,
+				515670375244B4644ED987D4 /* PanelView.swift in Sources */,
+				CC857127959611713597AFCE /* SettingsView.swift in Sources */,
+				62E3E81B79F6A679780E756F /* SlackAccountController.swift in Sources */,
+				E9EB5436CF04DB711FB51062 /* SourceCoordinator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5013E3B2C8E992A19595832A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BEB2E0DF5E085E9E3A04B31F /* Base.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/NotificationWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adrianeyre.NotificationWidget;
+				PRODUCT_MODULE_NAME = NotificationWidget;
+				PRODUCT_NAME = "Notification Widget";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B6AA8B91C2A276ACAB2B3A1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		CE05182EB7D78575FCAAA39C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BEB2E0DF5E085E9E3A04B31F /* Base.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/NotificationWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adrianeyre.NotificationWidget;
+				PRODUCT_MODULE_NAME = NotificationWidget;
+				PRODUCT_NAME = "Notification Widget";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		EC482800104D1F2C11E57C21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F0CD868581FA7B1DF110D43B /* Build configuration list for PBXNativeTarget "NotificationWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5013E3B2C8E992A19595832A /* Debug */,
+				CE05182EB7D78575FCAAA39C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F596043D94ABD04EC509C4BF /* Build configuration list for PBXProject "NotificationWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EC482800104D1F2C11E57C21 /* Debug */,
+				B6AA8B91C2A276ACAB2B3A1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		932E33ABCABB7EF82B573854 /* XCLocalSwiftPackageReference "Packages/NotificationWidgetCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/NotificationWidgetCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		92562085002C3A5A3B9C4C8A /* NotificationWidgetCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NotificationWidgetCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 752CD303947D59DDCBAA1DB5 /* Project object */;
+}

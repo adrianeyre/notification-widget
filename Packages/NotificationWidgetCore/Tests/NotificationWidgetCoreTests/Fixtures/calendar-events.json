@@ -1,0 +1,58 @@
+{
+  "kind": "calendar#events",
+  "defaultReminders": [{ "method": "popup", "minutes": 10 }, { "method": "email", "minutes": 30 }],
+  "items": [
+    {
+      "id": "standup_20261117",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=c3RhbmR1cA",
+      "summary": "Team stand-up",
+      "start": { "dateTime": "2026-11-17T09:30:00Z", "timeZone": "Europe/London" },
+      "end": { "dateTime": "2026-11-17T09:45:00Z", "timeZone": "Europe/London" },
+      "attendees": [
+        { "email": "me@example.com", "self": true, "responseStatus": "accepted" },
+        { "email": "sam@example.com", "responseStatus": "declined" }
+      ],
+      "reminders": { "useDefault": true }
+    },
+    {
+      "id": "declined_1",
+      "status": "confirmed",
+      "summary": "All-hands I declined",
+      "start": { "dateTime": "2026-11-17T11:00:00.000Z" },
+      "end": { "dateTime": "2026-11-17T12:00:00.000Z" },
+      "attendees": [{ "email": "me@example.com", "self": true, "responseStatus": "declined" }],
+      "reminders": { "useDefault": true }
+    },
+    {
+      "id": "offsite",
+      "status": "confirmed",
+      "summary": "Company offsite",
+      "start": { "date": "2026-11-17" },
+      "end": { "date": "2026-11-18" },
+      "reminders": { "useDefault": false }
+    },
+    {
+      "id": "review",
+      "status": "confirmed",
+      "summary": "Design review",
+      "start": { "dateTime": "2026-11-17T14:00:00+01:00" },
+      "end": { "dateTime": "2026-11-17T15:00:00+01:00" },
+      "reminders": { "useDefault": false, "overrides": [{ "method": "popup", "minutes": 5 }, { "method": "popup", "minutes": 1 }] }
+    },
+    {
+      "id": "cancelled_1",
+      "status": "cancelled",
+      "start": { "dateTime": "2026-11-17T16:00:00Z" },
+      "end": { "dateTime": "2026-11-17T17:00:00Z" }
+    },
+    {
+      "id": "office",
+      "status": "confirmed",
+      "summary": "Office",
+      "eventType": "workingLocation",
+      "start": { "date": "2026-11-17" },
+      "end": { "date": "2026-11-18" }
+    }
+  ]
+}

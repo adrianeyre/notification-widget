@@ -1,0 +1,1 @@
+{"envelope_id":"a1b2c3d4-0000-4000-8000-000000000003","payload":{"team_id":"T0123","event":{"type":"reaction_added","user":"U_ALEX","reaction":"thumbsup","item":{"type":"message","channel":"C0789","ts":"1794906100.000200"},"event_ts":"1794906200.000300"},"type":"event_callback"},"type":"events_api","accepts_response_payload":false,"retry_attempt":0,"retry_reason":""}

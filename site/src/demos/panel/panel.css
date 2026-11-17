@@ -1,0 +1,412 @@
+/* The hero: the Panel on a strip of desktop. Everything nests under .nw-hero. */
+.nw-hero {
+  /* macOS system colors, light */
+  --nw-label: #1d1d1f;
+  --nw-secondary: rgba(60, 60, 67, 0.62);
+  --nw-tertiary: rgba(60, 60, 67, 0.3);
+  --nw-glyph: #8a8a8e;
+  --nw-blue: #007aff;
+  --nw-blue-soft: rgba(0, 122, 255, 0.13);
+  --nw-orange: #e67e00;
+  --nw-material: rgba(246, 246, 248, 0.74);
+  --nw-edge: rgba(0, 0, 0, 0.08);
+  --nw-raised: rgba(255, 255, 255, 0.78);
+  --nw-chip: rgba(0, 0, 0, 0.05);
+  --nw-hover: rgba(0, 0, 0, 0.045);
+  --nw-wall:
+    radial-gradient(70% 120% at 12% 0%, #d6e4f2 0%, transparent 70%),
+    radial-gradient(60% 120% at 92% 100%, #f2dcc6 0%, transparent 70%),
+    linear-gradient(100deg, #dfe8ef 0%, #ece6df 100%);
+
+  & .ss-stage {
+    overflow: hidden;
+    border-radius: 18px;
+    background: var(--nw-wall);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+    --ss-accent: var(--nw-blue);
+    --ss-accent-soft: var(--nw-blue-soft);
+  }
+
+  & .ss-stage[data-theme='dark'] {
+    --nw-label: rgba(255, 255, 255, 0.9);
+    --nw-secondary: rgba(235, 235, 245, 0.6);
+    --nw-tertiary: rgba(235, 235, 245, 0.28);
+    --nw-glyph: #98989f;
+    --nw-blue: #0a84ff;
+    --nw-blue-soft: rgba(10, 132, 255, 0.22);
+    --nw-orange: #ff9f0a;
+    --nw-material: rgba(40, 40, 44, 0.72);
+    --nw-edge: rgba(255, 255, 255, 0.1);
+    --nw-raised: rgba(255, 255, 255, 0.08);
+    --nw-chip: rgba(255, 255, 255, 0.08);
+    --nw-hover: rgba(255, 255, 255, 0.06);
+    --nw-wall:
+      radial-gradient(70% 120% at 12% 0%, #1d3346 0%, transparent 70%),
+      radial-gradient(60% 120% at 92% 100%, #3a2c22 0%, transparent 70%),
+      linear-gradient(100deg, #141b22 0%, #1c1a19 100%);
+  }
+
+  /* ---- The Panel: 940 x 320 pt, 22pt continuous corners, regular material ---- */
+
+  & .nw-panel {
+    position: absolute;
+    top: 40px;
+    left: 90px;
+    box-sizing: border-box;
+    width: 940px;
+    height: 320px;
+    padding: 14px;
+    border-radius: 22px;
+    background: var(--nw-material);
+    -webkit-backdrop-filter: blur(30px) saturate(1.8);
+    backdrop-filter: blur(30px) saturate(1.8);
+    box-shadow: 0 0 0 0.5px var(--nw-edge), var(--ss-shadow-hero);
+    color: var(--nw-label);
+  }
+
+  & .ss-stage[data-theme='dark'] .nw-panel {
+    box-shadow: 0 0 0 1px var(--nw-edge), 0 30px 60px -12px rgba(0, 0, 0, 0.55);
+  }
+
+  & .nw-panel[data-shake] {
+    animation: nw-shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+
+  & .nw-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 20px;
+    padding: 0 2px;
+    margin-bottom: 12px;
+  }
+
+  & .nw-date {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 16px;
+  }
+
+  & .nw-new {
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 10px;
+    background: var(--nw-blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    text-box: trim-both cap alphabetic;
+    opacity: 0;
+    transform: scale(0.85);
+    will-change: transform;
+    transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  & .nw-new[data-show] {
+    opacity: 1;
+    transform: none;
+  }
+
+  & .nw-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr) 1px minmax(0, 1fr);
+    column-gap: 14px;
+    align-items: start;
+    height: 260px;
+    overflow: hidden;
+  }
+
+  & .nw-rule {
+    align-self: stretch;
+    height: 260px;
+    background: var(--nw-edge);
+  }
+
+  & .nw-col {
+    min-width: 0;
+  }
+
+  & .nw-col-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 16px;
+    padding: 0 2px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    color: var(--nw-secondary);
+  }
+
+  & .nw-col-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  & .nw-glyph {
+    color: var(--nw-glyph);
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  & .nw-col-count {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Events ---- */
+
+  & .nw-allday {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  & .nw-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 7px;
+    background: var(--nw-chip);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+  }
+
+  & .nw-next {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border-radius: 12px;
+    background: var(--nw-raised);
+    box-shadow: 0 0 0 0.5px var(--nw-edge), 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  & .nw-next-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  & .nw-next-title {
+    overflow: hidden;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  & .nw-next-when {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--nw-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .nw-countdown {
+    display: inline-flex;
+    gap: 4px;
+    font-weight: 600;
+    color: var(--nw-orange);
+  }
+
+  & .nw-join {
+    --ss-accent: var(--nw-blue);
+    font-weight: 600;
+  }
+
+  & .nw-later {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .nw-later-row {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    height: 26px;
+    padding: 0 2px;
+  }
+
+  & .nw-later-time {
+    font-family: var(--ss-mono);
+    font-size: 11.5px;
+    color: var(--nw-secondary);
+  }
+
+  & .nw-later-title {
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* ---- Rows: DMs and Mentions, Emails ---- */
+
+  /* The fills are inset and rounded; the list takes the negative margin so
+     the words line up with the column header */
+  & .nw-list {
+    margin: 0 -12px;
+  }
+
+  & .nw-row {
+    --ss-row-title: 13px;
+    --ss-row-subtitle: 12px;
+    --ss-row-meta: 11.5px;
+    --ss-row-line: 17px;
+    --ss-row-line-2: 16px;
+    --ss-row-gap: 1px;
+    column-gap: 9px;
+    padding-inline: 13px 12px;
+    transition: background-color 0.35s ease;
+  }
+
+  & .nw-row .ss-row__title {
+    color: var(--nw-label);
+  }
+
+  & .nw-row .ss-row__subtitle {
+    color: var(--nw-secondary);
+  }
+
+  & .nw-where {
+    font-weight: 400;
+    color: var(--nw-secondary);
+  }
+
+  & .nw-row[data-hover] {
+    background: var(--nw-hover);
+  }
+
+  /* An Item that caused an Alert: an accent-soft fill, no ring */
+  & .nw-row[data-highlight] {
+    background: var(--nw-blue-soft);
+  }
+
+  & .nw-person {
+    position: relative;
+    display: inline-flex;
+  }
+
+  & .nw-at {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    display: grid;
+    place-items: center;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--nw-blue);
+    color: #fff;
+    box-shadow: 0 0 0 1.5px var(--nw-material);
+  }
+
+  /* The time and the Dismiss share one slot: hovering swaps them */
+  & .nw-meta {
+    display: grid;
+    justify-items: end;
+    align-items: center;
+    font-variant-numeric: tabular-nums;
+    color: var(--nw-secondary);
+  }
+
+  & .nw-meta > * {
+    grid-area: 1 / 1;
+    transition: opacity 0.15s ease;
+  }
+
+  & .nw-dismiss {
+    display: grid;
+    place-items: center;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--nw-tertiary);
+    color: var(--ss-surface);
+    opacity: 0;
+  }
+
+  & .ss-stage[data-theme='dark'] .nw-dismiss {
+    color: #1c1c1e;
+  }
+
+  & .nw-dismiss[data-hover] {
+    background: var(--nw-secondary);
+  }
+
+  & .nw-row[data-hover] .nw-time {
+    opacity: 0;
+  }
+
+  & .nw-row[data-hover] .nw-dismiss {
+    opacity: 1;
+  }
+
+  & .nw-rest {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+  }
+
+  /* ---- Compact: the DMs and Mentions column alone, for a phone ---- */
+
+  & .ss-stage[data-layout='compact'] .nw-panel {
+    top: 28px;
+    left: 29px;
+    width: 300px;
+    height: 400px;
+  }
+
+  & .ss-stage[data-layout='compact'] .nw-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@keyframes nw-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-6px); }
+  32% { transform: translateX(5px); }
+  50% { transform: translateX(-4px); }
+  68% { transform: translateX(2.5px); }
+  84% { transform: translateX(-1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nw-hero .nw-panel[data-shake] {
+    animation: nw-pulse 0.6s ease;
+  }
+}
+
+@keyframes nw-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.86; }
+}
+
+/* Compact: the column runs on past the stage's crop, so the stage cuts it, not the column */
+.nw-hero .ss-stage[data-layout='compact'] .nw-columns {
+  height: 340px;
+}
+
+/* Compact: the column's clip reaches the Panel's edge, so a row's rounded fill isn't cut */
+.nw-hero .ss-stage[data-layout='compact'] .nw-columns {
+  margin: 0 -14px;
+  padding: 0 14px;
+}

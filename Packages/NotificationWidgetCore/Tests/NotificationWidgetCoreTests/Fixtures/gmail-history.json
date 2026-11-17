@@ -1,0 +1,7 @@
+{
+  "history": [
+    { "id": "1001", "messages": [{ "id": "m-new" }], "messagesAdded": [{ "message": { "id": "m-new", "labelIds": ["UNREAD", "INBOX"] } }] },
+    { "id": "1002", "labelsRemoved": [{ "message": { "id": "m-read" }, "labelIds": ["UNREAD"] }] }
+  ],
+  "historyId": "1005"
+}

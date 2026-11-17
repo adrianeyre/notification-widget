@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://notification-widget.adrianeyre.co.uk/sitemap.xml

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 210" width="880" height="210" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Setup in five steps</title>
+  <desc id="d">1 Google OAuth client approved by your Workspace admin. 2 Slack app approved by your Slack admin. 3 Build and run in Xcode. 4 Enter the clients in Settings. 5 Connect both Accounts.</desc>
+  <style>
+    .card { fill: #ffffff; stroke: #d0d4dc; }
+    .n { fill: #2f6fec; }
+    .nt { fill: #ffffff; font-size: 13px; font-weight: 700; }
+    .h { font-size: 13px; font-weight: 600; fill: #1d2330; }
+    .s { font-size: 11.5px; fill: #5b6474; }
+    .line { stroke: #b4bac5; stroke-width: 1.5; }
+    @media (prefers-color-scheme: dark) {
+      .card { fill: #1f2329; stroke: #3a404a; }
+      .h { fill: #eef1f6; }
+      .s { fill: #a3acba; }
+      .line { stroke: #4a515c; }
+    }
+  </style>
+  <line class="line" x1="100" y1="44" x2="780" y2="44"/>
+  <g>
+    <circle class="n" cx="100" cy="44" r="16"/><text class="nt" x="100" y="49" text-anchor="middle">1</text>
+    <rect class="card" x="20" y="76" width="160" height="112" rx="10"/>
+    <text class="h" x="34" y="102">Google client</text>
+    <text class="s" x="34" y="124">Calendar + Gmail APIs,</text>
+    <text class="s" x="34" y="142">Desktop app client,</text>
+    <text class="s" x="34" y="160">admin allows it</text>
+  </g>
+  <g>
+    <circle class="n" cx="270" cy="44" r="16"/><text class="nt" x="270" y="49" text-anchor="middle">2</text>
+    <rect class="card" x="190" y="76" width="160" height="112" rx="10"/>
+    <text class="h" x="204" y="102">Slack app</text>
+    <text class="s" x="204" y="124">From the manifest,</text>
+    <text class="s" x="204" y="142">xapp- token,</text>
+    <text class="s" x="204" y="160">admin approves</text>
+  </g>
+  <g>
+    <circle class="n" cx="440" cy="44" r="16"/><text class="nt" x="440" y="49" text-anchor="middle">3</text>
+    <rect class="card" x="360" y="76" width="160" height="112" rx="10"/>
+    <text class="h" x="374" y="102">Build and run</text>
+    <text class="s" x="374" y="124">Xcode, scheme</text>
+    <text class="s" x="374" y="142">NotificationWidget,</text>
+    <text class="s" x="374" y="160">⌘R</text>
+  </g>
+  <g>
+    <circle class="n" cx="610" cy="44" r="16"/><text class="nt" x="610" y="49" text-anchor="middle">4</text>
+    <rect class="card" x="530" y="76" width="160" height="112" rx="10"/>
+    <text class="h" x="544" y="102">Enter the clients</text>
+    <text class="s" x="544" y="124">Settings → Accounts</text>
+    <text class="s" x="544" y="142">→ Setup: Google ID</text>
+    <text class="s" x="544" y="160">and secret</text>
+  </g>
+  <g>
+    <circle class="n" cx="780" cy="44" r="16"/><text class="nt" x="780" y="49" text-anchor="middle">5</text>
+    <rect class="card" x="700" y="76" width="160" height="112" rx="10"/>
+    <text class="h" x="714" y="102">Connect</text>
+    <text class="s" x="714" y="124">Connect Google,</text>
+    <text class="s" x="714" y="142">Slack tokens or sign-in</text>
+    <text class="s" x="714" y="160">Panel fills in</text>
+  </g>
+</svg>
