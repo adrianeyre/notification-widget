@@ -64,7 +64,11 @@ final class GoogleAccountController: GoogleAccessTokenProvider {
                 if !state.isConnected {
                     lastError = "Allow access to both Calendar and Gmail, then connect again."
                 }
-                NSApp.activate()
+                // Back from the browser to Settings, if it's open. Without a window to show,
+                // activating would only take focus from the browser.
+                if NSApp.windows.contains(where: { $0.isVisible && $0.styleMask.contains(.titled) }) {
+                    NSApp.activate()
+                }
             } catch let error as GoogleOAuthError {
                 lastError = error.message
             } catch {

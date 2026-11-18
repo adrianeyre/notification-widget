@@ -107,7 +107,7 @@ final class AppModel {
     }
 
     func reconnect(_ source: Source) {
-        sources.reconnect(source)
+        sources.reconnect(source, interactive: true)
     }
 
     func panelHoverChanged(_ isHovering: Bool) {

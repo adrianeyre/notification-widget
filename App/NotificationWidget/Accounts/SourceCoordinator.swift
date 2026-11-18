@@ -64,17 +64,21 @@ final class SourceCoordinator {
     }
 
     func reconnectAll() {
-        reconnect(.googleCalendar)
-        reconnect(.slack)
+        reconnect(.googleCalendar, interactive: false)
+        reconnect(.slack, interactive: false)
     }
 
     /// Restarts a Source. Every restart begins with a Backfill.
-    func reconnect(_ source: Source) {
+    ///
+    /// Only an `interactive` reconnect (the user clicked Sign in) starts the browser sign-in.
+    /// Automatic ones, after wake or when the network returns, leave a Google Account that
+    /// needs sign-in as it is: opening the browser then would take focus from the app in use.
+    func reconnect(_ source: Source, interactive: Bool) {
         switch source {
         case .gmail, .googleCalendar:
             if case .connected(let account) = google.state {
                 startGoogle(accountEmail: account.identifier)
-            } else if case .needsSignIn = google.state {
+            } else if case .needsSignIn = google.state, interactive {
                 google.connect()
             }
         case .slack:
