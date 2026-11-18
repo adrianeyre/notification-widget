@@ -23,7 +23,8 @@ public struct HealthTracker: Equatable, Sendable {
 
     /// The expected time between successful updates.
     public var pollInterval: TimeInterval
-    /// `true` for Sources that hold a socket (Slack), where a dropped socket means out of date.
+    /// `true` for Sources that hold a socket (Slack). Their health follows the socket alone:
+    /// connected while it's up, out of date while it's down.
     public var usesSocket: Bool
     public private(set) var connection: Connection = .disconnected
     public private(set) var lastSuccess: Date?
@@ -68,7 +69,9 @@ public struct HealthTracker: Equatable, Sendable {
         case .needsSignIn: return .needsSignIn
         case .active: break
         }
-        if usesSocket, !isSocketUp { return .outOfDate }
+        // A socket Source is live while its socket is up: updates are pushed, so a quiet
+        // spell without messages isn't staleness. Only a dropped socket makes it out of date.
+        if usesSocket { return isSocketUp ? .connected : .outOfDate }
         let limit = pollInterval * 3
         // Before the first success, allow the same grace period from when it connected.
         guard let reference = lastSuccess ?? activeSince else { return .outOfDate }

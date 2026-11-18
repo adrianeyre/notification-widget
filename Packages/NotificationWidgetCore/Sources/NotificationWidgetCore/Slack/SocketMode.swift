@@ -159,11 +159,55 @@ public struct URLSessionWebSocketConnector: WebSocketConnecting {
 }
 
 final class URLSessionWebSocketConnection: WebSocketConnection, @unchecked Sendable {
+    /// How often a ping checks the connection is still alive.
+    static let keepaliveInterval: Duration = .seconds(30)
+
     // URLSessionWebSocketTask is thread-safe; it just isn't marked Sendable.
     private let task: URLSessionWebSocketTask
+    private let keepalive: Task<Void, Never>
 
     init(task: URLSessionWebSocketTask) {
         self.task = task
+        // Health trusts the socket while it's open, so a connection that dies silently
+        // (no close frame, for example after a network change) must be noticed: when a
+        // ping gets no pong, cancel the task so `receive()` throws and the client reconnects.
+        keepalive = Task { [task] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: Self.keepaliveInterval)
+                guard !Task.isCancelled else { return }
+                // A failed ping has already cancelled the task.
+                if await !Self.ping(task, timeout: Self.pongTimeout) { return }
+            }
+        }
+    }
+
+    deinit {
+        keepalive.cancel()
+    }
+
+    /// How long to wait for a pong before treating the connection as dead.
+    static let pongTimeout: Duration = .seconds(10)
+
+    /// Sends a ping and reports whether a pong came back within `timeout`. On a dead
+    /// connection the pong handler may never run, hence the race against a timer.
+    private static func ping(_ task: URLSessionWebSocketTask, timeout: Duration) async -> Bool {
+        await withTaskGroup(of: Bool.self) { group in
+            group.addTask {
+                await withCheckedContinuation { continuation in
+                    task.sendPing { error in continuation.resume(returning: error == nil) }
+                }
+            }
+            group.addTask {
+                try? await Task.sleep(for: timeout)
+                return false
+            }
+            let first = await group.next() ?? false
+            // The group waits for the ping child, which can't be cancelled; cancelling the
+            // task makes its pong handler run with an error, so the group can finish.
+            if !first { task.cancel(with: .goingAway, reason: nil) }
+            group.cancelAll()
+            return first
+        }
     }
 
     func send(_ text: String) async throws {
@@ -181,6 +225,7 @@ final class URLSessionWebSocketConnection: WebSocketConnection, @unchecked Senda
     }
 
     func close() {
+        keepalive.cancel()
         task.cancel(with: .normalClosure, reason: nil)
     }
 }
