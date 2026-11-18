@@ -80,18 +80,40 @@ struct GoogleOAuthTests {
         let transport = FakeTransport()
         transport.body = Data(#"{"access_token":"ya29.flow","expires_in":3600,"refresh_token":"1//flow","id_token":"\#(idToken(email: "me@example.com"))"}"#.utf8)
 
+        let browser = BrowserPage()
         let tokens = try await GoogleOAuth.signIn(client: googleClient, transport: transport) { url in
             let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
             let state = items.first { $0.name == "state" }?.value ?? ""
             let redirect = items.first { $0.name == "redirect_uri" }?.value ?? ""
-            Task { _ = try? await URLSession.shared.data(from: URL(string: "\(redirect)?code=4/xyz&state=\(state)")!) }
+            browser.load(URL(string: "\(redirect)?code=4/xyz&state=\(state)")!)
         }
+        #expect(try await browser.page().contains("You’re connected to Google"))
 
         #expect(tokens.accessToken == "ya29.flow")
         #expect(tokens.email == "me@example.com")
         let body = String(decoding: transport.requests.first?.httpBody ?? Data(), as: UTF8.self)
         #expect(body.contains("code=4/xyz") || body.contains("code=4%2Fxyz"))
         #expect(body.contains("code_verifier="))
+    }
+
+    @Test("A sign-in Google rejects shows the browser why")
+    func rejectedFlow() async throws {
+        let transport = FakeTransport()
+        transport.status = 400
+        transport.body = Data(#"{"error":"invalid_client"}"#.utf8)
+
+        let browser = BrowserPage()
+        await #expect(throws: GoogleOAuthError.tokenRequestFailed("invalid_client")) {
+            try await GoogleOAuth.signIn(client: googleClient, transport: transport) { url in
+                let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+                let state = items.first { $0.name == "state" }?.value ?? ""
+                let redirect = items.first { $0.name == "redirect_uri" }?.value ?? ""
+                browser.load(URL(string: "\(redirect)?code=4/xyz&state=\(state)")!)
+            }
+        }
+        let page = try await browser.page()
+        #expect(page.contains("Couldn’t connect to Google"))
+        #expect(page.contains("client ID or secret"))
     }
 }
 

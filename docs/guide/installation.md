@@ -69,13 +69,13 @@ Open **Settings…** from the menu bar icon and go to **Accounts**. Each Account
 **Google**
 
 1. In **Google → Setup**, paste the **Client ID** and **Client secret** from step 1 and click **Save**. The status changes from *Not set up* to *Not connected*.
-2. Click **Connect**, sign in with your work account in the browser and allow Calendar and Gmail access. The card shows your email address and *Connected*.
+2. Click **Connect**, sign in with your work account in the browser and allow Calendar and Gmail access. The browser then shows whether it worked: *You're connected to Google*, or what went wrong and how to try again. Close the tab. The card shows your email address and *Connected*.
 
 **Slack**
 
 1. Optional: in **Slack → Setup**, paste the Slack app's **Client ID** and **Client secret** and click **Save**, to sign in through the browser instead of pasting a user token.
 2. Paste the **app-level token** (`xapp-…`).
-3. Click **Sign in with Slack…**, or paste the **user token** (`xoxp-…`) and click **Save**. The card shows your name, workspace and *Connected*.
+3. Click **Sign in with Slack…** and allow access (the browser confirms when it's done), or paste the **user token** (`xoxp-…`) and click **Save**. The card shows your name, workspace and *Connected*.
 
 Client IDs are kept in the app's preferences; client secrets and tokens in your Keychain. The Panel fills in within a minute. Then:
 
