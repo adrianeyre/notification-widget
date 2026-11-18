@@ -77,6 +77,7 @@ The fresh-eye review in `references/review.md` (a separate reviewer with only th
 ## Assumptions
 
 - People, messages, Events and Emails are invented. Times fit a 09:18 "now" on Tuesday 17 November.
+- The people's portraits are invented too: illustrated SVGs from `scripts/avatars.mjs` in `public/avatars/`, standing in for Slack photos and Gravatars. Jonas Berg and Dev Patel have none, so the Emails column also shows the initials fallback.
 - "Alert sound" stands in for the Settings picker that is labelled "Sound" in the app, so it isn't confused with the Sound switch above it.
 - The page is shown at 1:1 from a 1168px viewport. Between 640 and 1168 the wide hero scales down: text reaches about 10px at 800 wide.
 
