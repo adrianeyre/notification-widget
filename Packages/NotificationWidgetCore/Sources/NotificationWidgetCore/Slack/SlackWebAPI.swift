@@ -33,8 +33,8 @@ public protocol SlackWebAPI: Sendable {
     func authTest() async throws -> SlackIdentity
     /// `apps.connections.open` with the app-level token: a WebSocket URL for Socket Mode.
     func openSocketModeURL() async throws -> URL
-    /// `users.info`: the user's display name.
-    func userName(id: String) async throws -> String
+    /// `users.info`: the user's display name and profile photo.
+    func user(id: String) async throws -> SlackUser
     /// `users.conversations`: the conversations the user is in, of the given types.
     func conversations(types: String) async throws -> [SlackConversation]
     /// `conversations.info`: includes `last_read` for the user.
@@ -73,19 +73,9 @@ public struct LiveSlackWebAPI: SlackWebAPI {
         return r.url
     }
 
-    public func userName(id: String) async throws -> String {
-        struct Response: Decodable {
-            struct User: Decodable {
-                struct Profile: Decodable { var display_name: String?; var real_name: String? }
-                var name: String?
-                var real_name: String?
-                var profile: Profile?
-            }
-            var user: User
-        }
-        let r: Response = try await call("users.info", ["user": id])
-        let candidates = [r.user.profile?.display_name, r.user.profile?.real_name, r.user.real_name, r.user.name]
-        return candidates.compactMap { $0?.nilIfBlank }.first ?? id
+    public func user(id: String) async throws -> SlackUser {
+        let r: UserInfoResponse = try await call("users.info", ["user": id])
+        return r.slackUser(fallbackName: id)
     }
 
     public func conversations(types: String) async throws -> [SlackConversation] {
@@ -156,5 +146,33 @@ public struct LiveSlackWebAPI: SlackWebAPI {
             return try JSONDecoder().decode(T.self, from: data)
         }
         throw SlackAPIError.http(429)
+    }
+}
+
+/// The `users.info` response.
+struct UserInfoResponse: Decodable {
+    struct User: Decodable {
+        struct Profile: Decodable {
+            var display_name: String?
+            var real_name: String?
+            var image_48: String?
+            var image_72: String?
+        }
+
+        var name: String?
+        var real_name: String?
+        var profile: Profile?
+    }
+
+    var user: User
+
+    func slackUser(fallbackName: String) -> SlackUser {
+        let names = [user.profile?.display_name, user.profile?.real_name, user.real_name, user.name]
+        // The Panel draws avatars at 24 points: 72 px stays sharp on Retina, 48 px is the fallback.
+        let image = [user.profile?.image_72, user.profile?.image_48].compactMap { $0?.nilIfBlank }.first
+        return SlackUser(
+            name: names.compactMap { $0?.nilIfBlank }.first ?? fallbackName,
+            avatarURL: image.flatMap(URL.init(string:))
+        )
     }
 }

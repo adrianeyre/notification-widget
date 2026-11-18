@@ -16,6 +16,7 @@ final class FakeSlackAPI: SlackWebAPI, @unchecked Sendable {
     var conversationList: [String: [SlackConversation]] = [:]
     var infos: [String: SlackConversation] = [:]
     var histories: [String: [SlackMessage]] = [:]
+    var avatars: [String: URL] = [:]
     var memberLists: [String: [String]] = [:]
     var socketURLs = 0
     var authError: SlackAPIError?
@@ -35,7 +36,7 @@ final class FakeSlackAPI: SlackWebAPI, @unchecked Sendable {
         return URL(string: "wss://wss-primary.slack.com/link/?ticket=\(socketURLs)")!
     }
 
-    func userName(id: String) async throws -> String { names[id] ?? id }
+    func user(id: String) async throws -> SlackUser { SlackUser(name: names[id] ?? id, avatarURL: avatars[id]) }
 
     func conversations(types: String) async throws -> [SlackConversation] {
         record("users.conversations:\(types)")

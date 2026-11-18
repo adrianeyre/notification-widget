@@ -177,6 +177,36 @@ struct GmailTests {
         #expect(EmailAddress.displayName(from: header) == expected)
     }
 
+    @Test("Sender addresses", arguments: [
+        ("\"Jamie Fox\" <Jamie@Example.com>", "Jamie@Example.com"),
+        ("<jamie@example.com>", "jamie@example.com"),
+        (" jamie@example.com ", "jamie@example.com"),
+        ("Jamie Fox", nil),
+        ("", nil),
+    ] as [(String, String?)])
+    func senderAddresses(header: String, expected: String?) {
+        #expect(EmailAddress.address(from: header) == expected)
+    }
+
+    @Test("Gravatar URLs hash the trimmed, lower-cased address and 404 when there's no photo")
+    func gravatar() throws {
+        // SHA-256 of "myemailaddress@example.com", from Gravatar's documentation.
+        let hash = "84059b07d4be67b806386c0aad8070a23f18836bbaae342275dc0a83414c32ee"
+        let url = try #require(Gravatar.url(for: " MyEmailAddress@example.com "))
+        #expect(url.absoluteString == "https://gravatar.com/avatar/\(hash)?s=64&d=404")
+        #expect(Gravatar.url(for: "  ") == nil)
+    }
+
+    @Test("An Email carries its sender's Gravatar")
+    func emailAvatar() {
+        let metadata = GmailMessageMetadata(id: "m1", from: "Jamie Fox <jamie@example.com>", subject: "Hi", receivedAt: referenceNow)
+        let item = GmailSource.item(from: metadata, accountEmail: nil)
+        #expect(item.avatarURL == Gravatar.url(for: "jamie@example.com"))
+
+        let noAddress = GmailMessageMetadata(id: "m2", from: nil, subject: "Hi", receivedAt: referenceNow)
+        #expect(GmailSource.item(from: noAddress, accountEmail: nil).avatarURL == nil)
+    }
+
     @Test("Decodes history and metadata responses")
     func decoding() throws {
         let history = try JSONDecoder().decode(GmailHistoryResponse.self, from: Fixture.data("gmail-history"))

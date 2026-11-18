@@ -156,6 +156,19 @@ struct HealthTests {
         #expect(tracker.health(now: referenceNow.addingTimeInterval(21)) == .outOfDate)
     }
 
+    @Test("Socket Source: stays connected while the socket is up, however quiet it is")
+    func socketStaysConnectedWhileUp() {
+        // Regression: Slack showed "Out of date" 6 minutes (3 × the read-check interval)
+        // after every connect, because only the socket's hello counted as an update.
+        var tracker = HealthTracker(pollInterval: 120, usesSocket: true)
+        tracker.markActive(at: referenceNow)
+        tracker.setSocket(up: true, at: referenceNow)
+        #expect(tracker.health(now: referenceNow.addingTimeInterval(361)) == .connected)
+        #expect(tracker.health(now: referenceNow.addingTimeInterval(6 * 60 * 60)) == .connected)
+        tracker.setSocket(up: false, at: referenceNow.addingTimeInterval(6 * 60 * 60))
+        #expect(tracker.health(now: referenceNow.addingTimeInterval(6 * 60 * 60 + 1)) == .outOfDate)
+    }
+
     @Test("Needs sign-in and disconnected override everything")
     func signInAndDisconnect() {
         var tracker = HealthTracker(pollInterval: 30)

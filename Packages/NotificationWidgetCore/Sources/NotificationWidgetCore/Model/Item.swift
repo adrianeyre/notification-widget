@@ -31,6 +31,9 @@ public struct Item: Identifiable, Hashable, Sendable {
     public var expiresAt: Date?
     /// Where clicking the Item takes the user (INT-1, INT-2).
     public var openURL: URL?
+    /// A picture of the person behind a DM, Mention or Email: the Slack profile photo, or
+    /// the sender's Gravatar. `nil` when there isn't one; the Panel then shows initials.
+    public var avatarURL: URL?
     /// Event-only details. `nil` for every other kind.
     public var event: EventDetails?
     /// Slack-only details for DMs and Mentions. `nil` for every other kind.
@@ -46,6 +49,7 @@ public struct Item: Identifiable, Hashable, Sendable {
         date: Date,
         expiresAt: Date? = nil,
         openURL: URL? = nil,
+        avatarURL: URL? = nil,
         event: EventDetails? = nil,
         slack: SlackMessageDetails? = nil
     ) {
@@ -57,6 +61,7 @@ public struct Item: Identifiable, Hashable, Sendable {
         self.date = date
         self.expiresAt = expiresAt
         self.openURL = openURL
+        self.avatarURL = avatarURL
         self.event = event
         self.slack = slack
     }

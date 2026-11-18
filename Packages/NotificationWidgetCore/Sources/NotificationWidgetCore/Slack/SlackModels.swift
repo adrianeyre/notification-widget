@@ -38,6 +38,17 @@ public struct SlackIdentity: Codable, Equatable, Sendable {
     }
 }
 
+/// A Slack user's name and profile photo, from `users.info`.
+public struct SlackUser: Equatable, Sendable {
+    public var name: String
+    public var avatarURL: URL?
+
+    public init(name: String, avatarURL: URL? = nil) {
+        self.name = name
+        self.avatarURL = avatarURL
+    }
+}
+
 /// A Slack message, from a Socket Mode event or from `conversations.history`.
 public struct SlackMessage: Decodable, Equatable, Sendable {
     public var type: String?

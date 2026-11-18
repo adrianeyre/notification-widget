@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 
 /// The Gmail Source: keeps the Emails matching the user's query in the Item store.
@@ -99,7 +100,8 @@ public final class GmailSource {
             title: metadata.subject?.nilIfBlank ?? "(No subject)",
             detail: metadata.from.map(EmailAddress.displayName(from:)) ?? "(Unknown sender)",
             date: metadata.receivedAt,
-            openURL: openURL(messageID: metadata.id, accountEmail: accountEmail)
+            openURL: openURL(messageID: metadata.id, accountEmail: accountEmail),
+            avatarURL: metadata.from.flatMap(EmailAddress.address(from:)).flatMap(Gravatar.url(for:))
         )
     }
 
@@ -129,5 +131,35 @@ enum EmailAddress {
             .trimmingCharacters(in: .whitespaces)
         if !name.isEmpty { return name }
         return String(trimmed[trimmed.index(after: open)..<close])
+    }
+
+    /// The bare address from a `From` header, or `nil` if it doesn't contain one.
+    ///
+    /// `"Jamie Fox" <jamie@example.com>` → `jamie@example.com`; `jamie@example.com` → `jamie@example.com`.
+    static func address(from header: String) -> String? {
+        let trimmed = header.trimmingCharacters(in: .whitespaces)
+        var address = trimmed
+        if let open = trimmed.lastIndex(of: "<"), let close = trimmed.lastIndex(of: ">"), open < close {
+            address = String(trimmed[trimmed.index(after: open)..<close])
+        }
+        address = address.trimmingCharacters(in: .whitespaces)
+        guard address.contains("@"), !address.contains(" ") else { return nil }
+        return address
+    }
+}
+
+/// Email sender photos. Gmail's API doesn't return the sender's picture, so the Panel
+/// uses their Gravatar, if they have one. Only a SHA-256 hash of the address is sent.
+public enum Gravatar {
+    /// The Panel draws avatars at 24 points; 64 px stays sharp on Retina.
+    static let size = 64
+
+    /// The sender's Gravatar URL. `d=404` makes it fail when they haven't set one, so the
+    /// Panel falls back to initials instead of showing a generic placeholder.
+    public static func url(for email: String) -> URL? {
+        let normalized = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !normalized.isEmpty else { return nil }
+        let hash = SHA256.hash(data: Data(normalized.utf8)).map { String(format: "%02x", $0) }.joined()
+        return URL(string: "https://gravatar.com/avatar/\(hash)?s=\(size)&d=404")
     }
 }
