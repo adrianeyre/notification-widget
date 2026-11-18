@@ -35,11 +35,15 @@ final class WidgetPanel: NSPanel {
         backgroundColor = .clear
         hasShadow = true
         isMovableByWindowBackground = true
+        // Nothing in the Panel takes typing, so a click or drag on it must not take keyboard
+        // focus from the app being used: the Panel only becomes key if a view asks for it.
+        becomesKeyOnlyIfNeeded = true
         // Leave the Panel out of screen sharing and screenshots (PNL-6).
         sharingType = .none
     }
 
-    // Let rows respond to hover and clicks without the app becoming active.
+    // Can become key only if a view needs the keyboard (`becomesKeyOnlyIfNeeded`); hover and
+    // clicks work without it, and the app never becomes active.
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
 }
@@ -47,6 +51,8 @@ final class WidgetPanel: NSPanel {
 /// A hosting view that handles the first click, so a click on an Item opens it straight away.
 private final class FirstClickHostingView<Content: View>: NSHostingView<Content> {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+    /// Clicks never need the Panel to be key, so they leave keyboard focus with the app in front.
+    override var needsPanelToBecomeKey: Bool { false }
 }
 
 /// Owns the Panel window: creates it, shows or hides it, and remembers where it was left (PNL-4).
