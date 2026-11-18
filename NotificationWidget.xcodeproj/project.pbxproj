@@ -178,6 +178,7 @@
 			buildPhases = (
 				32C8B115A1CDC46EC912C1B7 /* Sources */,
 				5205A21AF3FCA4848E2CE1BD /* Frameworks */,
+				68DC147E48D0E5800E96F83B /* Stamp version from git */,
 			);
 			buildRules = (
 			);
@@ -227,6 +228,30 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		68DC147E48D0E5800E96F83B /* Stamp version from git */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Stamp version from git";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n# Writes the app's version into the built app's Info.plist from git, so Settings and the\n# menu bar show the release this build came from (see AppVersion.swift).\n#\n# Releases are the v* tags semantic-release makes; nothing in the project is bumped.\n# Without git or tags (a shallow CI checkout, a source archive) the plist keeps\n# MARKETING_VERSION and CURRENT_PROJECT_VERSION from Config/Base.xcconfig.\nset -eu\n\nplist=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\ncd \"${SRCROOT}\"\n\nif ! git rev-parse --git-dir >/dev/null 2>&1; then\n  echo \"stamp-version: not a git checkout; keeping ${MARKETING_VERSION:-the xcconfig version}\"\n  exit 0\nfi\n\ntag=$(git describe --tags --match 'v[0-9]*' --abbrev=0 2>/dev/null || true)\nif [ -z \"$tag\" ]; then\n  echo \"stamp-version: no v* tags (fetch them with: git fetch --tags); keeping ${MARKETING_VERSION:-the xcconfig version}\"\n  exit 0\nfi\n\nversion=${tag#v}\nbuild=$(git rev-list --count HEAD)\ndescription=$(git describe --tags --match 'v[0-9]*' --dirty)\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${version}\" \"$plist\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion ${build}\" \"$plist\"\n/usr/libexec/PlistBuddy -c \"Delete :NWGitDescription\" \"$plist\" >/dev/null 2>&1 || true\n/usr/libexec/PlistBuddy -c \"Add :NWGitDescription string ${description}\" \"$plist\"\necho \"stamp-version: ${version} (${build}), ${description}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		32C8B115A1CDC46EC912C1B7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -260,6 +285,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = App/NotificationWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -337,6 +363,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = App/NotificationWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

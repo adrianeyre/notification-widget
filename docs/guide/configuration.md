@@ -16,6 +16,8 @@ Open **Settings…** from the menu bar icon (or press ⌘, while the menu is ope
 | Slack keywords | None | Channel messages containing one of these words appear like Mentions. Whole words, ignoring case: "deploy" matches "Deploy failed" but not "redeployed". |
 | Email filter | `in:inbox category:primary is:unread` | A Gmail search query: Emails matching it appear on the Panel. Any query that works in Gmail's search box works here. **Reset** puts the default back. |
 
+**About** at the bottom shows the app's **Version** and build number, with a link to that version's **Release notes**. A copy built after a release shows how far after it is, for example `1.2.0 + 3 commits (abc1234)`, and `modified` if it was built with uncommitted changes. You can select the version to copy it into a bug report. The menu bar menu shows the version too.
+
 ## Accounts
 
 ![Settings, Accounts](../images/settings-accounts.png)

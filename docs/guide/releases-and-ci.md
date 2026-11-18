@@ -28,6 +28,10 @@ build-and-test ─▶ release (main only) ─▶ site ─▶ deploy (main only)
 
 With squash merges, the **pull request title** is the commit message, so give PRs a Conventional Commits title. The first release is `v1.0.0`. The configuration is in [`.releaserc.json`](../../.releaserc.json), and the tooling is pinned in the root `package.json` and `package-lock.json` (the app itself has no Node code).
 
+### The version in the app
+
+Nothing in the project is bumped for a release; the tag is the version. Every build runs [`scripts/stamp-version.sh`](../../scripts/stamp-version.sh), which writes the latest `v*` tag into the built app's Info.plist: `CFBundleShortVersionString` (`1.2.0`), `CFBundleVersion` (the commit count) and `NWGitDescription` (`git describe`). Settings → General and the menu bar menu show it. Without git or tags, for example in CI's shallow checkout, the app keeps the `0.0.0` fallback from `Config/Base.xcconfig`.
+
 ## GitHub Pages and the custom domain
 
 One-time repository settings:

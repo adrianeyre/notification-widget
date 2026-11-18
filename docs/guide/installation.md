@@ -51,9 +51,10 @@ open -e Config/Secrets.xcconfig
 2. Choose the **NotificationWidget** scheme and **My Mac**, then **Product → Run** (⌘R).
 3. The app has no Dock icon. Look for its icon in the menu bar; the Panel appears at the top right of your main screen.
 
-To keep using it day to day, build a Release copy and move it to Applications:
+To keep using it day to day, build a Release copy and move it to Applications. Fetch the tags first: the build takes its version from the latest release tag.
 
 ```sh
+git fetch --tags
 xcodebuild -project NotificationWidget.xcodeproj -scheme NotificationWidget -configuration Release \
   -derivedDataPath build/DerivedData build
 cp -R "build/DerivedData/Build/Products/Release/Notification Widget.app" /Applications/
