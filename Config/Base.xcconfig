@@ -4,7 +4,9 @@
 // not here. Config/Secrets.xcconfig (git-ignored) is optional: it only sets a signing
 // team, which reading macOS Focus status needs. Copy Config/Secrets.example.xcconfig.
 
-MARKETING_VERSION = 0.1.0
+// Fallbacks only: a build from a git clone takes its version from the latest v* release
+// tag (scripts/stamp-version.sh). These apply without git or tags, such as in CI.
+MARKETING_VERSION = 0.0.0
 CURRENT_PROJECT_VERSION = 1
 
 // Ad-hoc signing ("Sign to Run Locally") unless Secrets.xcconfig sets a team.

@@ -92,8 +92,38 @@ fileprivate struct GeneralSettingsView: View {
                         .disabled(settings.gmailQuery == AppSettings.defaultGmailQuery)
                 }
             }
+
+            Section("About") {
+                AppVersionRow(version: .current)
+            }
         }
         .formStyle(.grouped)
+    }
+}
+
+/// The app's version, selectable so it can be copied into a bug report, with a link to
+/// that release's notes.
+private struct AppVersionRow: View {
+    let version: AppVersion
+
+    var body: some View {
+        LabeledContent("Version") {
+            HStack(spacing: 8) {
+                Text(version.displayVersion)
+                    .monospacedDigit()
+                    .textSelection(.enabled)
+                if !version.build.isEmpty {
+                    Text("Build \(version.build)")
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+            }
+        }
+        .help(version.gitDescription ?? version.displayVersion)
+        if let notes = version.releaseNotesURL {
+            Link("Release notes", destination: notes)
+                .font(.callout)
+        }
     }
 }
 

@@ -18,7 +18,7 @@ enum DebugSnapshots {
         }
         for tab in SettingsTabSnapshot.allCases {
             let height: CGFloat = switch tab {
-            case .general: 560
+            case .general: 720
             case .accounts: 540
             case .alerts: 1010
             }

@@ -24,7 +24,7 @@ Each column shows up to five Items, then "+N more". The count beside each column
 - **Click an Item** to open it: Slack DMs and Mentions open in the Slack app, Emails in Gmail, Events in Google Calendar.
 - **Hover an Item** and click **×** to **Dismiss** it. Dismiss only hides it on the Panel; nothing changes in Slack, Gmail or Calendar. Dismissals survive restarts.
 - **Drag the date** to move the Panel. It remembers its position and screen, and goes back to the main screen if that screen is unplugged.
-- The menu bar icon has **Show/Hide Panel**, **Settings…** and **Quit**.
+- The menu bar icon's menu starts with the app's version (for example *Notification Widget 1.2.0*), then has **Show/Hide Panel**, **Settings…** and **Quit**.
 
 ## When Items leave
 

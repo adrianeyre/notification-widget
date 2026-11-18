@@ -16,12 +16,17 @@ struct NotificationWidgetApp: App {
     }
 }
 
-/// The menu bar menu (PNL-9): Show/Hide Panel, Settings…, Quit.
+/// The menu bar menu (PNL-9): the app's version, Show/Hide Panel, Settings…, Quit.
 private struct MenuBarMenu: View {
     @Bindable var model: AppModel
     @Environment(\.openSettings) private var openSettings
 
     var body: some View {
+        // A disabled item, as macOS menus show an app's version.
+        Text(AppVersion.current.menuTitle)
+
+        Divider()
+
         Button(model.settings.isPanelVisible ? "Hide Panel" : "Show Panel") {
             model.settings.isPanelVisible.toggle()
         }

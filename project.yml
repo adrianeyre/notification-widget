@@ -47,8 +47,19 @@ targets:
         ENABLE_HARDENED_RUNTIME: true
         GENERATE_INFOPLIST_FILE: false
         COMBINE_HIDPI_IMAGES: true
+        # The version script reads the repository's .git, outside the sandbox's inputs.
+        ENABLE_USER_SCRIPT_SANDBOXING: false
     dependencies:
       - package: NotificationWidgetCore
+    postBuildScripts:
+      # Before signing: the version from the latest v* release tag (scripts/stamp-version.sh).
+      - name: Stamp version from git
+        path: scripts/stamp-version.sh
+        # Runs every build (the tags may have moved), after Xcode writes the Info.plist.
+        basedOnDependencyAnalysis: false
+        inputFiles:
+          - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
+        showEnvVars: false
 schemes:
   NotificationWidget:
     build:
