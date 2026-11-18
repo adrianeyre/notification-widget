@@ -32,6 +32,38 @@ struct SlackItemsTests {
         #expect(item.title == "Have you got five minutes to look at the release notes?")
         #expect(item.openURL?.absoluteString == "slack://channel?team=T0123&id=D0456&message=1794906000.000100")
         #expect(item.expiresAt == item.date.addingTimeInterval(24 * 60 * 60))
+        #expect(item.avatarURL == nil)
+    }
+
+    @Test("A DM carries the sender's Slack profile photo")
+    func dmAvatar() async throws {
+        let api = FakeSlackAPI()
+        let photo = URL(string: "https://avatars.slack-edge.com/2026-01-01/priya_72.jpg")!
+        api.avatars["U_PRIYA"] = photo
+        let (source, store, _) = makeSource(api: api)
+        let event = try #require(try { () throws -> SlackMessage? in
+            if case .event(_, let message) = try SocketModeProtocol.decode(Fixture.text("socket-event-im")) { return message }
+            return nil
+        }())
+
+        await source.handle(event)
+
+        #expect(try #require(store.visibleItems.first).avatarURL == photo)
+    }
+
+    @Test("users.info gives the display name and the 72 px photo, falling back to 48 px")
+    func userInfoDecoding() throws {
+        let full = Data(#"{"ok":true,"user":{"name":"priya","profile":{"display_name":"Priya","real_name":"Priya Shah","image_48":"https://a/48.jpg","image_72":"https://a/72.jpg"}}}"#.utf8)
+        let user = try JSONDecoder().decode(UserInfoResponse.self, from: full).slackUser(fallbackName: "U1")
+        #expect(user == SlackUser(name: "Priya", avatarURL: URL(string: "https://a/72.jpg")))
+
+        let small = Data(#"{"ok":true,"user":{"name":"priya","profile":{"display_name":"","image_48":"https://a/48.jpg"}}}"#.utf8)
+        #expect(try JSONDecoder().decode(UserInfoResponse.self, from: small).slackUser(fallbackName: "U1")
+            == SlackUser(name: "priya", avatarURL: URL(string: "https://a/48.jpg")))
+
+        let none = Data(#"{"ok":true,"user":{}}"#.utf8)
+        #expect(try JSONDecoder().decode(UserInfoResponse.self, from: none).slackUser(fallbackName: "U1")
+            == SlackUser(name: "U1"))
     }
 
     @Test("A group DM shows the other members' names")

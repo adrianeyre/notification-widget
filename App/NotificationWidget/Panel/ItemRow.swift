@@ -1,3 +1,4 @@
+import AppKit
 import NotificationWidgetCore
 import SwiftUI
 
@@ -29,7 +30,7 @@ struct PersonRow: View {
         HStack(alignment: .top, spacing: 10) {
             Button { model.open(item) } label: {
                 HStack(alignment: .top, spacing: 10) {
-                    PersonAvatar(name: sender, isMention: item.kind == .mention)
+                    PersonAvatar(name: sender, imageURL: item.avatarURL, isMention: item.kind == .mention)
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 4) {
                             Text(sender)
@@ -232,9 +233,12 @@ private struct RelativeTime: View {
     }
 }
 
-/// An initials disc in the person's own muted colour, with an "@" badge for a Mention.
+/// The person's photo (their Slack profile picture or Gravatar) in a disc, or their
+/// initials in their own muted colour while it loads or when there isn't one. A Mention
+/// gets an "@" badge.
 private struct PersonAvatar: View {
     let name: String
+    let imageURL: URL?
     let isMention: Bool
 
     private static let palette: [Color] = [
@@ -256,15 +260,25 @@ private struct PersonAvatar: View {
         return Self.palette[sum % Self.palette.count]
     }
 
+    private var photo: NSImage? { imageURL.flatMap { AvatarImages.shared.image(for: $0) } }
+
     var body: some View {
         Circle()
             .fill(color.gradient)
             .frame(width: PanelMetrics.avatarSize, height: PanelMetrics.avatarSize)
             .overlay {
-                Text(initials)
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .offset(x: isMention ? -1 : 0, y: isMention ? -1 : 0)
+                if let photo {
+                    Image(nsImage: photo)
+                        .resizable()
+                        .scaledToFill()
+                        .clipShape(Circle())
+                        .accessibilityLabel(name)
+                } else {
+                    Text(initials)
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .offset(x: isMention ? -1 : 0, y: isMention ? -1 : 0)
+                }
             }
             .overlay(alignment: .bottomTrailing) {
                 if isMention {
@@ -278,6 +292,51 @@ private struct PersonAvatar: View {
                 }
             }
             .padding(.top, 1)
+            .task(id: imageURL) {
+                if let imageURL { await AvatarImages.shared.load(imageURL) }
+            }
+    }
+}
+
+/// Downloaded avatar photos, kept for the app's lifetime so rows don't flash back to
+/// initials when the Panel redraws. A URL with no photo (Gravatar answers 404) or that
+/// failed to load is skipped for a while, then tried again.
+@MainActor
+@Observable
+final class AvatarImages {
+    static let shared = AvatarImages()
+
+    /// How long to wait before retrying a URL that had no photo or failed.
+    private static let retryAfter: TimeInterval = 60 * 60
+    /// Enough for every sender on the Panel many times over.
+    private static let capacity = 500
+
+    private var images: [URL: NSImage] = [:]
+    @ObservationIgnored private var failedAt: [URL: Date] = [:]
+    @ObservationIgnored private var inFlight: Set<URL> = []
+
+    func image(for url: URL) -> NSImage? { images[url] }
+
+    func load(_ url: URL) async {
+        guard images[url] == nil, !inFlight.contains(url) else { return }
+        if let failed = failedAt[url], Date().timeIntervalSince(failed) < Self.retryAfter { return }
+        inFlight.insert(url)
+        defer { inFlight.remove(url) }
+
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            guard (response as? HTTPURLResponse)?.statusCode == 200, let image = NSImage(data: data) else {
+                failedAt[url] = Date()
+                return
+            }
+            if images.count >= Self.capacity { images.removeAll() }
+            images[url] = image
+            failedAt[url] = nil
+        } catch {
+            // A cancelled load means the row went away; a later one will load it.
+            let cancelled = error is CancellationError || (error as? URLError)?.code == .cancelled
+            if !cancelled { failedAt[url] = Date() }
+        }
     }
 }
 

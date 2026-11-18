@@ -16,8 +16,8 @@ The Panel is a horizontal strip, 940 × 320 points, so it fits a short, wide dis
 |---|---|
 | Header | Today's date, and how many Items are new (highlighted) |
 | **Events** | All-day Events as chips; the next Event in a raised card with its time, a live countdown when it starts within 15 minutes, and **Join** for Google Meet or Zoom; then the rest of today |
-| **DMs and Mentions** | Slack direct messages, group DMs, @mentions, replies in threads you've posted in, and keyword matches: who, where and the first ~100 characters |
-| **Emails** | Unread mail matching your Gmail filter (by default the Primary inbox): sender and subject only, never the body |
+| **DMs and Mentions** | Slack direct messages, group DMs, @mentions, replies in threads you've posted in, and keyword matches: who (with their Slack photo), where and the first ~100 characters |
+| **Emails** | Unread mail matching your Gmail filter (by default the Primary inbox): sender (with their Gravatar, if they have one) and subject only, never the body |
 
 Each column shows up to five Items, then "+N more". The count beside each column's title is the total.
 
@@ -49,6 +49,7 @@ A new Item can trigger an **Alert**: a sound, plus the Panel rising above your w
 - The Panel is **hidden from screenshots and screen sharing** by default. Turn on **Allow screen capture** in Settings → General if you want it visible.
 - The app is **read-only**: it never marks anything as read, replies, or changes anything at a Source.
 - Google and Slack tokens and client secrets are kept in the Keychain.
+- **Avatars**: Slack DMs and Mentions show the sender's Slack profile photo. Gmail doesn't share sender photos, so Emails show the sender's [Gravatar](https://gravatar.com) if they have one; to look it up the app sends Gravatar a SHA-256 hash of the sender's address, never the address itself. Anyone without a photo gets their initials.
 
 ## Health and reconnecting
 
@@ -56,7 +57,7 @@ Each column's header shows a status when its Source isn't healthy, with a one-cl
 
 | Status | Means | Fix |
 |---|---|---|
-| Out of date | No successful update for 3 poll intervals, or the Slack socket is down | **Reconnect** |
+| Out of date | Calendar or Gmail: no successful update for 3 poll intervals. Slack: the socket is down (a quiet socket that's still open stays connected) | **Reconnect** |
 | Needs sign-in | The sign-in expired or a token was rejected | **Sign in** |
 | Disconnected | No Account is connected | **Connect** (opens Settings) |
 

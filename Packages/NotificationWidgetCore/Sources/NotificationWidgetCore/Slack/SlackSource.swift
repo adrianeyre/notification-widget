@@ -21,7 +21,7 @@ public final class SlackSource {
 
     public private(set) var threads = ThreadTracker()
     private var items: [Item.ID: Item] = [:]
-    private var userNames: [String: String] = [:]
+    private var users: [String: SlackUser] = [:]
     private var labels: [String: String] = [:]
 
     public init(
@@ -174,7 +174,8 @@ public final class SlackSource {
         for id in Set(SlackText.mentionedUserIDs(in: text)).prefix(5) {
             names[id] = await userName(id)
         }
-        let sender = await userName(message.user ?? "")
+        let senderUser = await user(message.user ?? "")
+        let sender = senderUser.name
         let where_ = await label(channel: channel, channelType: channelType)
 
         var detail = "\(sender) · \(where_)"
@@ -193,16 +194,21 @@ public final class SlackSource {
             date: date,
             expiresAt: date.addingTimeInterval(Self.itemLifetime),
             openURL: Self.deepLink(team: identity.teamID, channel: channel, ts: message.ts, threadTS: message.threadTS),
+            avatarURL: senderUser.avatarURL,
             slack: SlackMessageDetails(channelID: channel, ts: message.ts, threadTS: message.threadTS)
         )
     }
 
     private func userName(_ id: String) async -> String {
-        guard !id.isEmpty else { return "Someone" }
-        if let cached = userNames[id] { return cached }
-        let name = (try? await api.userName(id: id)) ?? id
-        userNames[id] = name
-        return name
+        await user(id).name
+    }
+
+    private func user(_ id: String) async -> SlackUser {
+        guard !id.isEmpty else { return SlackUser(name: "Someone") }
+        if let cached = users[id] { return cached }
+        let user = (try? await api.user(id: id)) ?? SlackUser(name: id)
+        users[id] = user
+        return user
     }
 
     private func label(channel: String, channelType: String) async -> String {
