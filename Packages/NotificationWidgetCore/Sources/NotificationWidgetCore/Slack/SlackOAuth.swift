@@ -118,20 +118,44 @@ public enum SlackOAuth {
         await openBrowser(authorizeURL(configuration, state: state))
 
         let target = try await receiver.waitForRedirect(timeout: .seconds(300))
-        let code = try code(fromCallback: target, expectedState: state)
-        let (data, _) = try await transport.send(exchangeRequest(configuration, code: code))
-        return try userToken(fromExchangeResponse: data)
+        do {
+            let code = try code(fromCallback: target, expectedState: state)
+            let (data, _) = try await transport.send(exchangeRequest(configuration, code: code))
+            let token = try userToken(fromExchangeResponse: data)
+            receiver.respond(OAuthCallbackPage.response(.slack, .signedIn))
+            return token
+        } catch {
+            receiver.respond(OAuthCallbackPage.response(.slack, callbackOutcome(for: error)))
+            throw error
+        }
+    }
+
+    /// What the browser's callback page says when sign-in fails.
+    static func callbackOutcome(for error: Error) -> OAuthCallbackPage.Outcome {
+        switch error {
+        case SlackOAuthError.denied("access_denied"): .cancelled
+        case let error as SlackOAuthError: .failed(error.message)
+        default: .failed("Couldn’t reach Slack to finish signing in. Check your connection and try again.")
+        }
     }
 }
 
 /// A one-shot HTTP listener on the loopback interface that catches an OAuth redirect.
+///
+/// The browser's request for the callback is held open until ``respond(_:)``, so the page
+/// it shows can say whether the code was exchanged for a token, not just that it arrived.
 public final class LoopbackRedirectReceiver: @unchecked Sendable {
+    /// How long the browser waits for the outcome before it gets a page anyway.
+    static let responseTimeout: DispatchTimeInterval = .seconds(90)
+
     private let listener: NWListener
     private let path: String
     private let queue = DispatchQueue(label: "NotificationWidget.oauth")
     private let lock = NSLock()
     private var continuation: CheckedContinuation<String, Error>?
     private var result: Result<String, Error>?
+    /// The callback's connection, waiting for its page. Only touched on `queue`.
+    private var pending: NWConnection?
 
     /// `port` 0 lets the system pick a free port; ``start()`` returns the one it got.
     public init(port: UInt16, path: String) throws {
@@ -165,8 +189,20 @@ public final class LoopbackRedirectReceiver: @unchecked Sendable {
         }
     }
 
+    /// Sends the page to the browser that followed the redirect. Only the first call counts.
+    func respond(_ response: String) {
+        queue.async { [self] in
+            guard let connection = pending else { return }
+            pending = nil
+            connection.send(content: Data(response.utf8), completion: .contentProcessed { _ in connection.cancel() })
+        }
+    }
+
+    /// Stops listening. A browser still waiting gets a page saying the sign-in didn't finish.
     func stop() {
-        listener.cancel()
+        respond(OAuthCallbackPage.http(status: "200 OK", body: "Sign-in didn’t finish. Try again from Notification Widget’s Settings.",
+                                       nonce: nil, type: "text/plain"))
+        queue.async { [listener] in listener.cancel() }
     }
 
     /// The request target of the first request to `path`.
@@ -187,6 +223,8 @@ public final class LoopbackRedirectReceiver: @unchecked Sendable {
         }
     }
 
+    private var hasResult: Bool { lock.withLock { result != nil } }
+
     private func complete(_ outcome: Result<String, Error>) {
         lock.withLock {
             guard result == nil else { return }
@@ -204,12 +242,22 @@ public final class LoopbackRedirectReceiver: @unchecked Sendable {
             let target = Self.requestTarget(fromRequest: request)
             let isCallback = target.map { $0.hasPrefix(self.path) } ?? false
 
-            let body = isCallback
-                ? "<h2>Notification Widget</h2><p>You can close this tab and go back to the app.</p>"
-                : "<p>Not found</p>"
-            let response = "HTTP/1.1 \(isCallback ? "200 OK" : "404 Not Found")\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: \(body.utf8.count)\r\nConnection: close\r\n\r\n\(body)"
-            connection.send(content: Data(response.utf8), completion: .contentProcessed { _ in connection.cancel() })
-            if isCallback, let target { self.complete(.success(target)) }
+            // Only the first callback is held for the outcome; repeats (a reload) and anything
+            // else, such as the favicon, are answered straight away.
+            guard isCallback, let target, self.pending == nil, !self.hasResult else {
+                let response = isCallback
+                    ? OAuthCallbackPage.http(status: "200 OK", body: "You can close this tab.", nonce: nil, type: "text/plain")
+                    : OAuthCallbackPage.notFoundResponse
+                connection.send(content: Data(response.utf8), completion: .contentProcessed { _ in connection.cancel() })
+                return
+            }
+            self.pending = connection
+            self.queue.asyncAfter(deadline: .now() + Self.responseTimeout) { [weak self] in
+                guard let self, self.pending === connection else { return }
+                self.respond(OAuthCallbackPage.http(status: "200 OK", body: "Sign-in is taking longer than expected. Check Notification Widget’s Settings.",
+                                                    nonce: nil, type: "text/plain"))
+            }
+            self.complete(.success(target))
         }
     }
 

@@ -36,7 +36,9 @@ APP="build/DerivedData/Build/Products/Debug/Notification Widget.app"
 "$APP/Contents/MacOS/Notification Widget" -UseSampleItems YES -SnapshotDir docs/images
 ```
 
-That writes `panel-light.png`, `panel-dark.png` and one `settings-*.png` per Settings tab.
+That writes `panel-light.png`, `panel-dark.png` and one `settings-*.png` per Settings tab. Run it from the repository root: the Panel shots load the sample people's portraits from `site/public/avatars/`. Use a copy without Accounts set up, or leave the `settings-*.png` files out of the commit, because the Settings shots show this Mac's real setup state.
+
+The people in the screenshots and on the website are invented, and so are their faces. `site/scripts/avatars.mjs` draws them as small SVGs standing in for Slack photos and Gravatars. A few people (Payroll, GitHub, a group DM) have no portrait, so the pictures show the initials fallback too. To change them, edit the list in the script and run `node scripts/avatars.mjs` from `site/`.
 
 ## Changing the project
 
@@ -55,7 +57,7 @@ npm run dev     # local preview
 npm run build   # writes site/dist/
 ```
 
-See `site/REHEARSAL.md` for how the demos were checked.
+See `site/REHEARSAL.md` for how the demos were checked. `site/public/og.png` (the link preview) is the hero's poster frame, the reduced-motion still, at 2×: the `.pg-hero-demo` figure plus 16 px of page around it, at a 1280 px wide window.
 
 ## Commit messages
 

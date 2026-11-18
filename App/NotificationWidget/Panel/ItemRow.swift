@@ -317,6 +317,13 @@ final class AvatarImages {
 
     func image(for url: URL) -> NSImage? { images[url] }
 
+    #if DEBUG
+    /// Puts a photo in place without downloading it, for the debug screenshots.
+    func preload(_ image: NSImage, for url: URL) {
+        images[url] = image
+    }
+    #endif
+
     func load(_ url: URL) async {
         guard images[url] == nil, !inFlight.contains(url) else { return }
         if let failed = failedAt[url], Date().timeIntervalSince(failed) < Self.retryAfter { return }

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<clipPath id="c"><circle cx="64" cy="64" r="64"/></clipPath>
+<g clip-path="url(#c)">
+<rect width="128" height="128" fill="#f4ecd9"/>
+
+<path d="M20 128c2-22 20-34 44-34s42 12 44 34z" fill="#c08a3e"/>
+<path d="M54 80h20v14c0 6-20 6-20 0z" fill="#946342"/>
+<path d="M54 94c3 4 7 6 10 6s7-2 10-6l-4-3h-12z" fill="#9d7133"/>
+<ellipse cx="41" cy="62" rx="4" ry="6" fill="#9e6a47"/>
+<ellipse cx="87" cy="62" rx="4" ry="6" fill="#9e6a47"/>
+<ellipse cx="64" cy="60" rx="23" ry="27" fill="#a8714b"/>
+
+<circle cx="48" cy="38" r="9" fill="#2b2523"/><circle cx="60" cy="33" r="10" fill="#2b2523"/><circle cx="72" cy="34" r="10" fill="#2b2523"/><circle cx="82" cy="42" r="9" fill="#2b2523"/><circle cx="42" cy="48" r="8" fill="#2b2523"/><circle cx="86" cy="52" r="7" fill="#2b2523"/>
+<circle cx="55" cy="62" r="2.4" fill="#2d2a2a"/>
+<circle cx="73" cy="62" r="2.4" fill="#2d2a2a"/>
+<path d="M57 73c4 4 10 4 14 0" fill="none" stroke="#5c3e29" stroke-width="2.2" stroke-linecap="round"/>
+
+</g>
+</svg>

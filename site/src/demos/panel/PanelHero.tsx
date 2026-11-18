@@ -191,10 +191,19 @@ const MESSAGES: Message[] = [
   { name: 'Olu Adeyemi', where: '#support', time: '07:32', text: 'Ticket queue is clear for the morning', mention: true },
 ]
 
+// Illustrated portraits of these invented people (public/avatars, drawn by
+// scripts/avatars.mjs), standing in for Slack photos and Gravatars. Anyone missing
+// here has none and shows initials, as the app does.
+const PORTRAITS = new Set([
+  'Priya Shah', 'Tom Okafor', 'Lena Fischer', 'Sam Reid', 'Nina Haas', 'Olu Adeyemi', 'Maria Lopez', 'Aisha Khan',
+])
+const portrait = (name: string) =>
+  PORTRAITS.has(name) ? `/avatars/${name.toLowerCase().replace(/\s+/g, '-')}.svg` : undefined
+
 function Person({ name, mention }: { name: string; mention?: boolean }) {
   return (
     <span className="nw-person">
-      <Avatar name={name} size={24} />
+      <Avatar name={name} size={24} src={portrait(name)} />
       {mention && (
         <span className="nw-at" aria-label="Mention">
           <AtSign size={8} strokeWidth={3} />

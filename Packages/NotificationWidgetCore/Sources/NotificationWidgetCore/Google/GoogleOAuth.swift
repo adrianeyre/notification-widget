@@ -235,8 +235,24 @@ public enum GoogleOAuth {
         } catch SlackOAuthError.timedOut {
             throw GoogleOAuthError.timedOut
         }
-        let code = try code(fromCallback: target, expectedState: state)
-        let (data, response) = try await transport.send(exchangeRequest(client: client, code: code, verifier: verifier, redirectURI: redirectURI))
-        return try tokens(fromResponse: data, status: response.statusCode, now: now())
+        do {
+            let code = try code(fromCallback: target, expectedState: state)
+            let (data, response) = try await transport.send(exchangeRequest(client: client, code: code, verifier: verifier, redirectURI: redirectURI))
+            let tokens = try tokens(fromResponse: data, status: response.statusCode, now: now())
+            receiver.respond(OAuthCallbackPage.response(.google, .signedIn))
+            return tokens
+        } catch {
+            receiver.respond(OAuthCallbackPage.response(.google, callbackOutcome(for: error)))
+            throw error
+        }
+    }
+
+    /// What the browser's callback page says when sign-in fails.
+    static func callbackOutcome(for error: Error) -> OAuthCallbackPage.Outcome {
+        switch error {
+        case GoogleOAuthError.denied("access_denied"): .cancelled
+        case let error as GoogleOAuthError: .failed(error.message)
+        default: .failed("Couldn’t reach Google to finish signing in. Check your connection and try again.")
+        }
     }
 }

@@ -5,6 +5,13 @@ import Foundation
 /// The app uses these instead of real Sources when launched with
 /// `-UseSampleItems YES`, and SwiftUI previews use them too.
 public enum SampleItems {
+    /// An illustrated portrait of an invented person, served by the project's website from
+    /// `site/public/avatars/` (drawn by `site/scripts/avatars.mjs`). People without one
+    /// show initials, as anyone without a Slack photo or Gravatar does.
+    public static func avatarURL(_ slug: String) -> URL? {
+        URL(string: "https://notification-widget.adrianeyre.co.uk/avatars/\(slug).svg")
+    }
+
     public static func items(now: Date = Date(), calendar: Calendar = .current) -> [Item] {
         events(now: now, calendar: calendar) + messages(now: now) + emails(now: now)
     }
@@ -44,14 +51,14 @@ public enum SampleItems {
     }
 
     public static func messages(now: Date) -> [Item] {
-        let samples: [(ItemKind, String, String)] = [
-            (.dm, "Priya Shah · DM", "Have you got five minutes to look at the release notes before I send them?"),
-            (.mention, "Sam Lee · #platform", "@you can you check the deploy pipeline? It failed twice this morning"),
-            (.dm, "Jordan Kim · DM", "Thanks for the review!"),
-            (.mention, "Alex Chen · #design", "Replied in thread: I think the second option reads better"),
-            (.dm, "Taylor, Morgan · DM", "Lunch at 1?"),
-            (.mention, "Robin Diaz · #ops", "@you heads up, the on-call rota changed"),
-            (.dm, "Casey Wu · DM", "Got the slides, thanks"),
+        let samples: [(ItemKind, String, String, String?)] = [
+            (.dm, "Priya Shah · DM", "Have you got five minutes to look at the release notes before I send them?", "priya-shah"),
+            (.mention, "Sam Lee · #platform", "@you can you check the deploy pipeline? It failed twice this morning", "sam-lee"),
+            (.dm, "Jordan Kim · DM", "Thanks for the review!", "jordan-kim"),
+            (.mention, "Alex Chen · #design", "Replied in thread: I think the second option reads better", "alex-chen"),
+            (.dm, "Taylor, Morgan · DM", "Lunch at 1?", nil),
+            (.mention, "Robin Diaz · #ops", "@you heads up, the on-call rota changed", "robin-diaz"),
+            (.dm, "Casey Wu · DM", "Got the slides, thanks", "casey-wu"),
         ]
         return samples.enumerated().map { index, sample in
             Item(
@@ -60,16 +67,17 @@ public enum SampleItems {
                 title: sample.2,
                 detail: sample.1,
                 date: now.addingTimeInterval(Double(-index) * 600),
-                openURL: URL(string: "slack://open")
+                openURL: URL(string: "slack://open"),
+                avatarURL: sample.3.flatMap(avatarURL)
             )
         }
     }
 
     public static func emails(now: Date) -> [Item] {
-        let samples: [(String, String)] = [
-            ("Payroll", "Your November payslip is ready"),
-            ("Jamie Fox", "Quarterly planning: agenda"),
-            ("GitHub", "[notification-widget] CI passed on main"),
+        let samples: [(String, String, String?)] = [
+            ("Payroll", "Your November payslip is ready", nil),
+            ("Jamie Fox", "Quarterly planning: agenda", "jamie-fox"),
+            ("GitHub", "[notification-widget] CI passed on main", nil),
         ]
         return samples.enumerated().map { index, sample in
             Item(
@@ -78,7 +86,8 @@ public enum SampleItems {
                 title: sample.1,
                 detail: sample.0,
                 date: now.addingTimeInterval(Double(-index) * 1800),
-                openURL: URL(string: "https://mail.google.com/mail/u/0/#inbox")
+                openURL: URL(string: "https://mail.google.com/mail/u/0/#inbox"),
+                avatarURL: sample.2.flatMap(avatarURL)
             )
         }
     }

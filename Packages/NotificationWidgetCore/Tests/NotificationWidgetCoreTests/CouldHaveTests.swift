@@ -296,15 +296,83 @@ struct SlackOAuthTests {
         let transport = FakeTransport()
         transport.body = Data(#"{"ok":true,"authed_user":{"access_token":"xoxp-flow"}}"#.utf8)
 
+        let browser = BrowserPage()
         let token = try await SlackOAuth.signIn(configuration, transport: transport) { authorizeURL in
             // Play the browser: follow Slack's redirect back to the app with the same state.
             let state = URLComponents(url: authorizeURL, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == "state" }?.value ?? ""
-            let callback = URL(string: "http://127.0.0.1:\(configuration.port)/slack/oauth/callback?code=abc&state=\(state)")!
-            Task { _ = try? await URLSession.shared.data(from: callback) }
+            browser.load(URL(string: "http://127.0.0.1:\(configuration.port)/slack/oauth/callback?code=abc&state=\(state)")!)
         }
 
         #expect(token == "xoxp-flow")
+        // The browser is answered only once the token is in hand, so it can say so.
+        let page = try await browser.page()
+        #expect(page.contains("You’re connected to Slack"))
+        #expect(page.contains("Connected"))
         let body = String(decoding: transport.requests.first?.httpBody ?? Data(), as: UTF8.self)
         #expect(body.contains("code=abc"))
+    }
+}
+
+@Suite("Sign-in callback page")
+struct OAuthCallbackPageTests {
+    @Test("Signed in: names the service and what it loads, with the badge turning Connected")
+    func signedIn() {
+        let page = OAuthCallbackPage.response(.google, .signedIn)
+        #expect(page.hasPrefix("HTTP/1.1 200 OK\r\n"))
+        #expect(page.contains("<title>Connected to Google · Notification Widget</title>"))
+        #expect(page.contains("You’re connected to Google"))
+        #expect(page.contains("Calendar and Gmail"))
+        #expect(page.contains(#"<span class="badge" data-animate>"#))
+    }
+
+    @Test("Cancelled: says nothing was shared and how to try again")
+    func cancelled() {
+        let page = OAuthCallbackPage.response(.slack, .cancelled)
+        #expect(page.contains("Sign-in was cancelled"))
+        #expect(page.contains("Sign in with Slack…"))
+        #expect(!page.contains(#"<span class="badge" data-animate>"#))
+    }
+
+    @Test("Failed: shows the message, escaped")
+    func failed() {
+        let page = OAuthCallbackPage.response(.google, .failed("Bad <script>alert(1)</script> & co"))
+        #expect(page.contains("Couldn’t connect to Google"))
+        #expect(page.contains("Bad &lt;script&gt;alert(1)&lt;/script&gt; &amp; co"))
+        #expect(!page.contains("<script>alert"))
+    }
+
+    @Test("Locked down: a nonce'd script only, no referrer, not cached, a correct length")
+    func headers() throws {
+        let page = OAuthCallbackPage.response(.slack, .signedIn)
+        let parts = page.components(separatedBy: "\r\n\r\n")
+        let head = try #require(parts.first)
+        let body = parts.dropFirst().joined(separator: "\r\n\r\n")
+        #expect(head.contains("Content-Length: \(body.utf8.count)"))
+        #expect(head.contains("Referrer-Policy: no-referrer"))
+        #expect(head.contains("Cache-Control: no-store"))
+        let nonce = try #require(head.firstMatch(of: /script-src 'nonce-([0-9A-F]+)'/)?.1)
+        #expect(body.contains("<script nonce=\"\(nonce)\">"))
+        #expect(!body.contains("http://") && !body.contains("https://"))
+    }
+
+    @Test("Denied sign-ins read as cancelled; other failures carry their message")
+    func outcomes() {
+        #expect(GoogleOAuth.callbackOutcome(for: GoogleOAuthError.denied("access_denied")) == .cancelled)
+        #expect(GoogleOAuth.callbackOutcome(for: GoogleOAuthError.stateMismatch) == .failed(GoogleOAuthError.stateMismatch.message))
+        #expect(SlackOAuth.callbackOutcome(for: SlackOAuthError.denied("access_denied")) == .cancelled)
+        #expect(SlackOAuth.callbackOutcome(for: SlackOAuthError.exchangeFailed("bad")) == .failed(SlackOAuthError.exchangeFailed("bad").message))
+    }
+}
+
+/// Plays the browser in a sign-in flow: loads the callback URL and keeps the page it gets.
+final class BrowserPage: @unchecked Sendable {
+    private var task: Task<String, Error>?
+
+    func load(_ url: URL) {
+        task = Task { String(decoding: try await URLSession.shared.data(from: url).0, as: UTF8.self) }
+    }
+
+    func page() async throws -> String {
+        try await #require(task).value
     }
 }
